@@ -8,8 +8,9 @@
 			
 			// refers to the 'id' html attribute, which ZingChart uses to bind a
 			// chart to it's location on the page
-			var id = this.attr('id'); // set id = the id of the object on which .zingchart was called
+			var id = $(this).attr('id'); // set id = the id of the object on which .zingchart was called
 			this.getID = function() { return id; }
+			//console.log('just set id to: ' + id);
 			
 			// object containing the JSON used to configure the chart
 			var JSON = { };

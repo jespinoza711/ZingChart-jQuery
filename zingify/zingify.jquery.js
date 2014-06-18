@@ -22,7 +22,6 @@ $(document).ready( function() {
 				
 				if ( options.target !== undefined) {
 					var target = $('#' + options.target);
-					console.log(target);
 				} else {
 					var target = $('<div></div>').insertAfter(this);
 				}
