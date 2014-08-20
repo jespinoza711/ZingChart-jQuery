@@ -18,22 +18,43 @@ $(document).ready( function() {
 				return charts;
 			}
 			
+			/*
+			 * 	options [object]: {
+			 *		target 		[string]: Target to add the chart to. If undefined, a target will be created
+			 *		hideTable 	[boolean]: Hides table if true; default: false
+			 *	} 
+			 */
 			function convertToChart(i, options) {
-				
+				console.log("convertToChart:");
+				console.log("\toptions =", JSON.stringify(options));
+
+				var target = undefined;
 				if ( options.target !== undefined) {
-					var target = $('#' + options.target);
+					target = $('#' + options.target);
 				} else {
-					var target = $('<div></div>').insertAfter(this);
+					target = $('<div></div>').insertAfter(this);
+
+					// we need an options.target for the ID
+					// Create the target from 
+					options.target = (new Date()).valueOf().toString();
+					target.attr('id', options.target);
 				}
+
+				console.log("\ttarget =", target);
 				
 				if (options.hideTable === true) {
 					$(this).hide();
 				}
 				
+				// 
 				$(target).width( options.hasOwnProperty('width') ? options.width : '500px' );
 				$(target).height( options.hasOwnProperty('height') ? options.height : '500px' );
 
-				$(target).attr('id', 'zc_chart_' + i);
+				// Each chart needs a UNIQUE identifier
+				var zingchartID = options.target + '_zc_chart';
+				if (i > 0) zingchartID += i;
+				console.log('zingchartID =', zingchartID);
+				$(target).attr('id', zingchartID);
 				
 				var data = {};
 				
@@ -76,7 +97,22 @@ $(document).ready( function() {
 				
 				// get key-value mapped object of all the <table> attributes
 				// these will be parsed and the custom zingchart data extracted
-				var attributes = {};
+
+				/*
+				 *	Alternative way to extract data. Single attribute on the HTML element
+				 *	data-zc OR data-zingchart: contains a JSON string to be parsed
+				 */
+
+				var attributes = undefined;
+
+				try {
+					var jsonString = $(this).attr('data-zc') || $(this).attr('data-zingchart');
+					attributes = JSON.parse(jsonString);
+				} catch (err) {
+					console.log(err);
+					attributes = {};
+				}
+
 				$(this).each(function() {
 					$.each(this.attributes, function() {
 						if(this.specified) {
@@ -134,16 +170,18 @@ $(document).ready( function() {
 				}
 
 				$.extend(true, data, attrData); // finally, extend all the JSON data collected from attributes into the main data variable
+
+				// $.extend(true, data, attributes);
 				
 				// allow user to include JSON options in the standard form while invoking the zingify function
-				if (options.hasOwnProperty('JSON')) {
-					$.extend(true, data, options.JSON);
+				if (options.hasOwnProperty('data')) {
+					$.extend(true, data, options.data);
 				}
 				
 				// temp fix: convert data['scale-x'] into data['scaleX']
 				data['scaleX'] = data['scale-x'];
 				
-				return $(target).zingchart( { JSON: data } ); // and render the chart
+				return $(target).zingchart( { data: data } ); // and render the chart
 				
 			} // end convertToChart() function
 		} // end zingify function

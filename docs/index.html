@@ -1,25 +1,13 @@
 <!DOCTYPE html>
 <head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="../zingchart-html5-min.js"></script>
 	
 	<script src="../zingchart.jquery.js"></script>
-	<style type="text/css">
-		body {
-			width: 60%;
-			margin: 0 auto;
-		}
-		.zingchart {
-			width: 500px;
-			height: 300px;	
-		}
-		pre {
-			background-color: #E8E8E8;
-		}
-		h1 {
-			margin-top: 50px;
-		}
-	</style>
+	
+
 	<script>
 		$(document).ready( function() {
 			// example one
@@ -31,20 +19,20 @@
 					{ values: [3,5,7,9,10,12] }
 				]
 			};
-			$('#ex_1').zingchart( { JSON: data } );
+			$('#ex_1').zingchart( { data: data } );
 
 
 			// example two
-			var ex2 = $('#ex_2').zingchart( { JSON: data } );
+			var ex2 = $('#ex_2').zingchart( { data: data } );
 			$('#ex_2_button').click( function() {
-				ex2.setJSON( {type:"scatter"} );
+				ex2.modify({ data: { type:"scatter" } });
 			});
 
 
 			// example three
-			var ex3 = $('#ex_3').zingchart( { JSON: data } );
+			var ex3 = $('#ex_3').zingchart( { data: data } );
 			$('#ex_3_button').click( function() {
-				ex3.setJSON( { type: 'area' } ).title( 'new title' );
+				ex3.modify({ data: { type: 'area' } }).title( 'new title' );
 			});
 		});
 	</script>
@@ -52,12 +40,12 @@
 <body>
 	
 	<h1>Example 1: Basic Usage</h1>
-	<p>The jQuery plugin for ZingChart allows devs to create and manipulate charts, and generally access the ZingChart api, in familiar jQuery syntax.</p>
+	<p>The jQuery plugin for ZingChart allows devs to create and manipulate charts, and generally access the ZingChart API, in familiar jQuery syntax.</p>
 	<p>The most basic usage of the plugin entails using jQuery to select an element to apply the chart to and calling .zingchart() on it:
 	<pre>$('#myDiv').zingchart();</pre>
 	<p>Technically this will initiate a ZingChart jQuery object on the selected element, but we want to pass in some data for ZingChart to work with. 
-	The .zingchart() function takes one paramater, an object. This object 
-	can contain a variety of key-value pairs. The main one you'll need in order to render a chart is 'JSON'. This should be another object that corresponds with
+	The .zingchart() function takes one parameter, an object. This object 
+	can contain a variety of key-value pairs. The main one you'll need in order to render a chart is 'data'. This should be another object that corresponds with
 	the JSON data structure passed to ZingChart's render() function as the 'data' variable, and the syntax should be as described here: 
 	<a href="http://www.zingchart.com/docs/json-attributes-syntax/">http://www.zingchart.com/docs/json-attributes-syntax/</a>.</p>
 	<p>A basic example:</p>
@@ -71,13 +59,13 @@
 			]
 		};
 		
-		$('#myDiv').zingchart( { JSON: data } );
+		$('#myDiv').zingchart( { data: data } );
 	</pre>
 	<p>which will render something like this:</p>
 	<div id="ex_1" class="zingchart"></div>
 	<p>The data has now been rendered in the '#myDiv' element. In most cases though, you'll probably want to save the ZingChart jQuery object 
 		you've just created to manipulate it later, e.g.:</p>
-	<pre>var myChart = $('#myDiv').zingchart({ JSON: data });</pre>
+	<pre>var myChart = $('#myDiv').zingchart({ data: data });</pre>
 
 
 
@@ -94,15 +82,15 @@
 				{ values: [3,5,7,9,10,12] }
 			]
 		};
-		var myChart = $('#myDiv').zingchart( { JSON: data } );
+		var myChart = $('#myDiv').zingchart( { data: data } );
 
-		var newJSON = { type: "scatter" };
+		var newData = { type: "scatter" };
 
 		$('#button').click( function() {
-			myChart.setJSON( newJSON );
+			myChart.setData( newData );
 		});
 	</pre>
-	<button id="ex_2_button">set new JSON</button>
+	<button id="ex_2_button">set new data</button>
 	<div id="ex_2" class="zingchart"></div>
 	
 
@@ -113,10 +101,10 @@
 	<h1>Example 3: Chaining on your ZingChart object</h1>
 	<p>The returned ZingChart object can be chained just like a regular jQuery object. This allows you to do something like:</p>
 	<pre>
-		var myChart = $('#myDiv').zingchart( { JSON: data } );
+		var myChart = $('#myDiv').zingchart( { data: data } );
 
 		$('#button').click( function() {
-			myChart.setJSON( { type: 'area' } ).title( 'new title' );
+			myChart.setData( { type: 'area' } ).title( 'new title' );
 		});
 	</pre>
 	<button id="ex_3_button">change to area and reset title</button>

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="../zingchart-html5-min.js"></script>
 	<script src="../zingchart.jquery.js"></script>
 	<script src="../zingify/zingify.jquery.js"></script>
-	<style type="text/css">
+	<!-- <style type="text/css">
 		code {
 			background-color: #FFFFCC;
 		}
-	</style>
+	</style>-->
 </head>
 <body>
 	<h1>ZingChart jQuery Table-to-Chart Plugin</h1>
@@ -18,7 +19,7 @@
 	<p>This plugin takes the data from an HTML table and converts renders it in a ZingChart. It allows the user to submit JSON data along with the table
 	when rendering, or to pull data from HTML5 custom data attributes.</p>
 	
-	<em>note: the JS code snippets below are assumed to be within a jQuery $(document).ready() block</em>
+	<em>note: the JS code snippets below are assumed to be within a jQuery <code>$(document).ready()</code> block</em>
 	
 	<h2>Configuration</h2>
 	<ul>Using the plugin requires you include the following scripts:
@@ -71,7 +72,7 @@
 	
 	<p>When zingified as follows:</p>
 	
-	<code>$('table#myTable').zingify();</code>
+	<pre>$('table#myTable').zingify();</pre>
 	
 	<p>Will render this chart:</p>
 
@@ -79,6 +80,8 @@
 
 
 	<br><br><br>
+	<!-- data-zc='{ "type": "line", "title": { "text": "Quantity Sold" }, "scale-y": { "label": { "text": "quantity" } } }' -->
+	<!-- <table data-zc-type="line" data-zc-title_text="Quantity Sold" data-zc-scale-y_label_text="quantity" id="ex_2"> -->
 	<table data-zc-type="line" data-zc-title_text="Quantity Sold" data-zc-scale-y_label_text="quantity" id="ex_2">
 		<thead>
 			<tr>
@@ -157,10 +160,24 @@
 	<script>
 		$(document).ready( function() {
 			$('#ex_1').zingify({
-				target: 'ex_1_chart'
+				target: 'ex_1_chart',
+				data: {
+					"type": "line"
+				}
 			});
 			$('#ex_2').zingify({
-				target: 'ex_2_chart'
+				target: 'ex_2_chart',
+				// data: { 
+				// 	"type": "line", 
+				// 	"title": { 
+				// 		"text": "Quantity Sold" 
+				// 	}, 
+				// 	"scale-y": {
+				// 		"label": {
+				// 			"text": "quantity" 
+				// 		}
+				// 	} 
+				// }
 			});
 		});
 	</script>
