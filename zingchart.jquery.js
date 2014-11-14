@@ -8,16 +8,19 @@
 		/*********** MAIN METHODS ***********/
 		/************************************/
 
+		// Bind an event to a handler
 		this.bind = function(eventName, handler) {
 			zingchart.bind(id, eventName, handler);
 			return this;
 		}
 
+		// Unbind an event from a handler
 		this.unbind = function(eventName, handler) {
 			zingchart.unbind(id, eventName, handler);
 			return this;
 		}
 
+		// Render the chart with options
 		this.render = function(opts) {
 			zingchart.render(opts);
 			return this;
@@ -27,24 +30,29 @@
 		/************ ATTRIBUTES ************/
 		/************************************/
 
+
+		// Set async to true if a value is passed
 		this.async = function(val) {
 			if (val !== undefined) return zingchart.ASYNC;
 			zingchart.ASYNC;
 			return this; 
 		}
 
+		// Set ZingChart font family to the passed value
 		this.fontFamily = function(val) {
 			if (val !== undefined) return zingchart.FONTFAMILY;
 			zingchart.FONTFAMILY;
 			return this; 
 		}
 
+		// Set Zingchart font size to the passed value
 		this.fontSize = function(val) {
 			if (val !== undefined) return zingchart.FONTSIZE;
 			zingchart.FONTSIZE;
 			return this; 
 		}
 
+		// Not entirely sure what this one does...
 		this.zcOutput = function(val) {
 			if (val !== undefined) return zingchart.ZCOUTPUT;
 			zingchart.ZCOUTPUT;
@@ -56,73 +64,149 @@
 		/************ API METHODS ***********/
 		/************************************/
 
-		/* Data Manipulation */
+		// All docs can be viewed online at http://www.zingchart.com/docs/api/api-methods/
+
+		/******* Data Manipulation **********/
+
+		// Adds a node to a graph.
+		// opts ======================================================================
+		// nodeindex : The index in the specified plot where the new node should go. Current values will be shifted.
+		// plotid    : The id of the plot to which data will be added.
+		// plotindex : The index of the plot to which data will be added.
+		// update    : Defaults to true. Will automatically update the specified plot.
+		// value     : The value to add to the plot.
 		this.addNode = this.addnode = function(opts) {
 			zingchart.exec(id, 'addnode', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
-
+		
+		// Adds a new plot
+		// opts ======================================================================
+		// data/plotdata : The JSON data that would be set in the series section of the JSON for the individual plot.
+		// plotid        : The id of an existing polot after which the new plot will be inserted. If it's not set, the plot is inserted at the end.
+		// plotindex     : The index of the plot to be inserted. If it is not set, it is placed at the end.
+		// update        : If set to true, updates chart automatically. If not, adds update to queue.
 		this.addPlot = this.addplot = function(opts) {
 			zingchart.exec(id, 'addplot', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Appends data to the existing series. Can be used on a single plot or on the whole series.
+		// Note that the value arrays sent do not concatenate the existing ones.
+		// opts ======================================================================
+		// data      : The JSON data that would be set in the series section of the JSON for the individual plot.
+		// plotid    : The id of the plot if only appending the data on a single plot.
+		// plotindex : The index of the the plot if only appending the data on a single plot.
+		// update    :  If set to true, updates chart automatically. If not, adds update to queue.
 		this.appendSeriesData = this.appendseriesdata = function(opts) {
 			zingchart.exec(id, 'appendseriesdata', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Appends data to the end of a plot. Can be used on a single plot or the whole series.
+		// opts ======================================================================
+		// plotid    : The id of an existing plot after which the new plot will be inserted. If not set, is placed at the end.
+		// plotindex : The index of the plot if only appending the data on a single plot.
+		// values    : An array of values to append. If plotindex is not set, values should be an array of arrays.
+		// update    : If set to true, updates chart automatically. If not, adds update to queue.
 		this.appendSeriesValues = this.appendseriesvalues = function(opts) {
 			zingchart.exec(id, 'appendseriesvalues', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Returns the series data. If plot is specified via plotindex or plotid then only that series item data is returned.
+		// opts ======================================================================
+		// plotid    : The id of the plot if only setting the data on a single plot.
+		// plotindex : The index of the plot if only setting data on a single plot.
 		this.getSeriesData = this.getseriesdata = function(opts) {
 			zingchart.exec(id, 'getseriesdata', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Returns the series values. If plot is specified via plot index or plot id then only that series item's values are returned.
+		// opts ======================================================================
+		// plotid    : The id of the plot if only setting the data on a single plot.
+		// plotindex : The index of the plot if only setting the data on a single plot.
 		this.getSeriesValues = this.getseriesvalues = function(opts) {
 			zingchart.exec(id, 'getseriesvalues', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Modifies an exisitng plot.
+		// opts ======================================================================
+		// data/plotdata : The JSON string that would be appended in the series section of the JSON for the individual plot.
+		// plotid        : The id of an exisiting plot after which the new plot will be inserted. If not set, it is placed at the end.
+		// plotindex     : The index of the plot to be inserted. If not set, it is placed at the end.
+		// update        : If set to true, updates chart automatically. If not, adds update to queue.
 		this.modifyPlot = this.modifyplot = function(opts) {
 			zingchart.exec(id, 'modifyplot', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Removes a node.
+		// opts ======================================================================
+		// nodeindex : The index of the node to be removed. The values will be shifted.
+		// plotid    : The id of the plot from which the data will be removed.
+		// plotindex : The index of the plot from which that data will be removed.
+		// update    : If set to true, updates chart automatically. If not, adds update to queue.
 		this.removeNode = this.removenode = function(opts) {
 			zingchart.exec(id, 'removenode', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Removes a plot.
+		// opts ======================================================================
+		// nodeindex : The index of the node to be removed. The values will be shifted.
+		// plotid    : The id of the plot from which the data will be removed.
+		// plotindex : The index of the plot from which that data will be removed.
+		// update    : If set to true, updates chart automatically. If not, adds update to queue.
 		this.removePlot = this.removeplot = function(opts) {
 			zingchart.exec(id, 'removeplot', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Sets the new 3D parameters for the view, overrides the settings from 3d-aspect attribute of the chart
+		// opts ======================================================================
+		// true3d  : If set to true, uses a true 3D engine and allows access to perspective controls. If set to false, forces an isometric view.
+		// angle   : Sets the angle of view. Can be any value between 0 and 90.
+		// depth   : Can be used in either isometric or true3d. Allows setting of chart depth.
+		// x-angle : Requires true3d to be set to true. Allows control of x-angle perspective control.
+		// y-angle : Requires true3d to be set to true. Allows control of y-angle perspective control.
+		// z-angle : Requires true3d to be set to true. Allows control of z-angle perspective control.
+		// zoom    : Requires true 3d to be set to true. Allows control of zoom setting. Default is 1.0. If less than 1.0, leading 0 is require (i.e. 0.7)
+		// update  : If set to true, updates chart automatically. If not, adds update to queue.
 		this.set3dView = this.set3dview = function(opts) {
 			zingchart.exec(id, 'set3dview', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		// Changes the value of a single node.
+		// opts ======================================================================
+		// nodeindex : The index of the node to replace.
+		// plotid    : The id of the plot.
+		// plotindex : The index of the plot.
+		// update    : If set to true, updates chart automatically. If not, adds update to queue.
 		this.setNodeValue = this.setnodevalue = function(opts) {
 			zingchart.exec(id, 'setnodevalue', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
 			return this;
 		}
 
+		/**
+		 * Replaces the series data. Can be used on a single plot or the whole series.
+		 * @param  {object} opts
+		 * @return {zingchart}     
+		 */
 		this.setSeriesData = this.setseriesdata = function(opts) {
 			zingchart.exec(id, 'setseriesdata', opts);
 			if (opts && (opts.update || opts.update === undefined)) zingchart.exec(id, 'update');
@@ -607,22 +691,169 @@
 		}
 
 		/************************************/
-		/********* HELPER FUNCTIONS *********/
+		/********* API EVENTS ***************/
 		/************************************/
 
-		this.title = function(newTitle) {
-			if (newTitle === undefined)
-				return zingchart.exec(id, 'getdata').graphset[0].title.text;
-
-			zingchart.exec(id, 'modify', {
-				'object' : 'title',
-				'data'   : { 'text': newTitle }
-			});
+		this.complete = this.complete = function(toExecute) {
+			zingchart.bind(id, 'complete', function(){toExecute});
 			return this;
 		}
 
+		this.animation_end = this.animation_end = function(toExecute) {
+			zingchart.bind(id, 'animation_end', function(){toExecute});
+			return this;
+		}
+
+		this.animation_start = this.animation_start = function(toExecute) {
+			zingchart.bind(id, 'animation_start', function(){toExecute});
+			return this;
+		}
+
+		this.animation_step = this.animation_step = function(toExecute) {
+			zingchart.bind(id, 'animation_step', function(){toExecute});
+			return this;
+		}
+
+		this.modified = this.Modified = function(toExecute) {
+			zingchart.bind(id, 'modify', function(){toExecute});
+			return this;
+		}
+
+		this.node_add = this.node_add = function(toExecute) {
+			zingchart.bind(id, 'node_add', function(){toExecute});
+			return this;
+		}
+
+		this.node_remove = this.node_remove = function(toExecute) {
+			zingchart.bind(id, 'node_remove', function(){toExecute});
+			return this;
+		}
+
+		this.plot_add = this.plot_add = function(toExecute) {
+			zingchart.bind(id, 'plot_add', function(){toExecute});
+			return this;
+		}
+
+		this.plot_modify = this.plot_modify = function(toExecute) {
+			zingchart.bind(id, 'plot_modify', function(){toExecute});
+			return this;
+		}
+
+		this.plot_remove = this.plot_remove = function(toExecute) {
+			zingchart.bind(id, 'plot_remove', function(){toExecute});
+			return this;
+		}
+
+		this.reloaded = this.reloaded = function(toExecute) {
+			zingchart.bind(id, 'reloaded', function(){toExecute});
+			return this;
+		}
+
+		this.data_is_set = this.data_is_set = function(toExecute) {
+			zingchart.bind(id, 'setdata', function(){toExecute});
+			return this;
+		}
+
+		/************************************/
+		/********** EVENT FUNCTIONS *********/
+		/************************************/
+
+		/**
+		 * Fires when a user clicks on the chart
+		 * Returns a chart object.
+		 */
+		/*
+		this.click = function (object, callback) {
+			// RETURN callback CALLED ON OBJECT
+			if (callback) {
+				if (object == "node") {
+					zingchart.node_click = function(p){
+						callback(p);
+					};
+				}
+				else if (object == "menuItem") {
+					zingchart.menu_item_click = function (p) {
+						callback(p);
+					};
+				}
+				else if (object == "legendItem") {
+					zingchart.legend_item_click = function (p) {
+						callback(p);
+					};
+				}
+				else if (object == "legendMarker") {
+					zingchart.legend_marker_click = function (p) {
+						callback(p);
+					}
+				}
+				else if (object == "label") {
+					zingchart.label_click = function (p) {
+						callback(p);
+					}
+				}
+				else if (object == "shape") {
+					zingchart.shape_click = function (p) {
+						callback(p);
+					};
+				}
+				else if (object == "plot") {
+					zingchart.plot_click = function (p) {
+						callback(p);
+					}
+				}
+				else {
+					zingchart.click = function (p) {
+						callback(p);
+					}
+				}
+			}
+			else {
+				if (object == "node") {
+					zingchart.node_click = function(p){
+						return p;
+					};
+				}
+				else if (object == "menuItem") {
+					zingchart.menu_item_click = function (p) {
+						return p;
+					};
+				}
+				else if (object == "legendItem") {
+					zingchart.legend_item_click = function (p) {
+						return p;
+					};
+				}
+				else if (object == "legendMarker") {
+					zingchart.legend_marker_click = function (p) {
+						return p;
+					}
+				}
+				else if (object == "label") {
+					zingchart.label_click = function (p) {
+						return p;
+					}
+				}
+				else if (object == "shape") {
+					zingchart.shape_click = function (p) {
+						return p;
+					};
+				}
+				else if (object == "plot") {
+					zingchart.plot_click = function (p) {
+						return p;
+					}
+				}
+				else {
+					zingchart.click = function (p) {
+						return p;
+					}
+				}
+			}
+		};
+		*/
+
 		return this.render(options);
-	} // end zingchart() function defenition
+	} // end zingchart() function definition
 	
 }( jQuery ));
 

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="../zingchart-html5-min.js"></script>
+	
+	<!--<script src="../zingchart.jquery.js"></script>-->
+	<script src="../zingevents.js"></script>
+	
+
+	<script>
+		$(document).ready( function() {
+			// example one
+			var data = {
+				type: 'line',
+				title: { text: 'zingchart w/ jquery' },
+				series: [ 
+					{ values: [5,3,1,7,7,6] },
+					{ values: [3,5,7,9,10,12] }
+				]
+			};
+			$('#ex_1').zingchart(data);
+
+
+			// example two
+			var ex2 = $('#ex_2').zingchart(data);
+			$('#ex_2_button').click( function() {
+				ex2.addPlot({
+					plotindex : 1,
+					data : {
+						values : [10, 20, 15],
+						text : "My new plot"
+					}
+				});
+			});
+
+			ex2.nodeHover(function(){
+				console.log("on");
+			}, function(){
+				console.log("off");
+			});
+
+			// example three
+			var ex3 = $('#ex_3').zingchart(data);
+			$('#ex_3_button').click( function() {
+				ex3.set3dView();
+			});
+		});
+	</script>
+
+
+</head>
+<body>
+	
+	<h1>Example 1: Basic Usage</h1>
+	<p>The jQuery plugin for ZingChart allows devs to create and manipulate charts, and generally access the ZingChart API, in familiar jQuery syntax.</p>
+	<p>The most basic usage of the plugin entails using jQuery to select an element to apply the chart to and calling .zingchart() on it:
+	<pre>$('#myDiv').zingchart();</pre>
+	<p>Technically this will initiate a ZingChart jQuery object on the selected element, but we want to pass in some data for ZingChart to work with. 
+	The .zingchart() function takes one parameter, an object. This object 
+	can contain a variety of key-value pairs. The main one you'll need in order to render a chart is 'data'. This should be another object that corresponds with
+	the JSON data structure passed to ZingChart's render() function as the 'data' variable, and the syntax should be as described here: 
+	<a href="http://www.zingchart.com/docs/json-attributes-syntax/">http://www.zingchart.com/docs/json-attributes-syntax/</a>.</p>
+	<p>A basic example:</p>
+	<pre>
+		var data = {
+			type: 'line',
+			title: { text: 'zingchart w/ jquery' },
+			series: [ 
+				{ values: [5,3,1,7,7,6] },
+				{ values: [3,5,7,9,10,12] }
+			]
+		};
+		
+		$('#myDiv').zingchart( { data: data } );
+	</pre>
+	<p>which will render something like this:</p>
+	<div id="ex_1" class="zingchart"></div>
+	<p>The data has now been rendered in the '#myDiv' element. In most cases though, you'll probably want to save the ZingChart jQuery object 
+		you've just created to manipulate it later, e.g.:</p>
+	<pre>var myChart = $('#myDiv').zingchart({ data: data });</pre>
+
+
+
+
+
+	<h1>Example 2: Executing functions on the ZingChart jQuery object</h1>
+	<p>Once you've created a zingchart object, you can execute function on it in regular jQuery fashion.</p>
+	<pre>
+		var data = {
+			type: 'line',
+			title: { text: 'zingchart w/ jquery' },
+			series: [ 
+				{ values: [5,3,1,7,7,6] },
+				{ values: [3,5,7,9,10,12] }
+			]
+		};
+		var myChart = $('#myDiv').zingchart( { data: data } );
+
+		var newData = { type: "scatter" };
+
+		$('#button').click( function() {
+			myChart.setData( newData );
+		});
+	</pre>
+	<button id="ex_2_button">set new data</button>
+	<div id="ex_2" class="zingchart"></div>
+	
+
+
+
+
+	
+	<h1>Example 3: Chaining on your ZingChart object</h1>
+	<p>The returned ZingChart object can be chained just like a regular jQuery object. This allows you to do something like:</p>
+	<pre>
+		var myChart = $('#myDiv').zingchart( { data: data } );
+
+		$('#button').click( function() {
+			myChart.setData( { type: 'area' } ).title( 'new title' );
+		});
+	</pre>
+	<button id="ex_3_button">change to area and reset title</button>
+	<div id="ex_3" class="zingchart"></div>
+	     
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div id='one'></div>
+	<div id='two'></div>
+	
+</body>
+</html>

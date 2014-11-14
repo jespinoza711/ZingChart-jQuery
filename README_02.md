@@ -20,18 +20,24 @@ Looking for more info? Check out any of the below tutorials to get up to speed o
 
 Basics
 ------
-The ZingChart jQuery wrapper works just like normal jQuery. Each method or event is tacked on to the standard jQuery selector method. Here's an example of creating a ZingChart object on a div with an ID of "myChart":
+Step One is to make sure you have [jQuery loaded](http://jquery.com/download/). This wrapper won't work without it.
+
+The ZingChart jQuery wrapper works just like normal jQuery. Each method or event is tacked on to the standard jQuery selector method. All methods should be placed inside a ``` $(document).ready() ``` call to ensure the DOM is fully loaded. Here's an example of creating a ZingChart object on a div with an ID of "myChart":
 
 ```javascript
-$("#myChart").zingchart({
-	"type": "line",
-	"series": [
-		{
-			"values": [1,2,5,3,9,4]
-		}
-	]
-});
+$(document).ready(function() {
+	$("#myChart").zingchart({
+		"type": "line",
+		"series": [
+			{
+				"values": [1,2,5,3,9,4]
+			}
+		]
+	});
+})
 ```
+> For the sake of brevity, the rest of the examples will omit the ``` $(document).ready() ``` wrapper. That being said, you still need to include it when using this library.
+
 All of the methods which take an object as a parameter can have it passed through directly or by reference. Both are equivalent.
 
 **Directly**
@@ -120,7 +126,7 @@ Parameter | Object | [Node Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#mychart").addNode({
+myChart.addNode({
 	"plotindex": 1,
 	"nodeindex": 2,
 	"value": 12
@@ -136,7 +142,7 @@ Parameter | Object | [Plot Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").addPlot({
+myChart.addPlot({
 	"plotindex": 0,
 	"data": {
 		"values": [10,20,15]
@@ -153,7 +159,7 @@ Parameter | Object | [Series Object](http://www.zingchart.com/docs/api/api-metho
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").appendSeriesData({
+myChart.appendSeriesData({
 	"plotindex": 0,
 	data: {
 		"lineColor": "red"
@@ -170,7 +176,7 @@ Parameter | Object | [Series Object](http://www.zingchart.com/docs/api/api-metho
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").appendSeriesData({
+myChart.appendSeriesData({
 	"plotindex": 1,
 	"values": [19,28,13,42]
 });
@@ -185,13 +191,13 @@ Parameter | Object (OPTIONAL) | [Series Object](http://www.zingchart.com/docs/ap
 Return | Object | [Series Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__getseriesdata)
 
 ```javascript
-var myData = $("#myChart").getSeriesData({
+var myData = myChart.getSeriesData({
 	"plotindex": 1
 });
 
 // myData = the series data for plot[1] of the chart
 
-var allData = $("#myChart").getSeriesData();
+var allData = myChart.getSeriesData();
 
 // allData = the series data for all plots of the chart
 ```
@@ -205,13 +211,13 @@ Parameter | Object (OPTIONAL) | [Series Object](http://www.zingchart.com/docs/ap
 Return | Object | [Series Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__getseriesvalues)
 
 ```javascript
-var myValues = $("#myChart").getSeriesValues({
+var myValues = myChart.getSeriesValues({
 	"plotindex": 0
 });
 
 // myValues = the series values for plot[0] of the chart
 
-var allValues = $("#myChart").getSeriesValues();
+var allValues = myChart.getSeriesValues();
 
 // allValues = the series values for all plots of the chart
 ```
@@ -225,7 +231,7 @@ Parameter | Object | [Plot Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").modifyPlot({
+myChart.modifyPlot({
 	"plotindex": 0,
 	"data": {
 		"lineWidth": 2,
@@ -243,7 +249,7 @@ Parameter | Object | [Node Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").removeNode({
+myChart.removeNode({
 	"plotindex": 1,
 	"nodeindex": 2
 });
@@ -258,7 +264,7 @@ Parameter | Object | [Plot Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").removePlot({
+myChart.removePlot({
 	"plotindex": 0
 });
 ```
@@ -272,7 +278,7 @@ Parameter | Object | [3D View Object](http://www.zingchart.com/docs/api/api-meth
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").set3dView({
+myChart.set3dView({
 	"y-angle": 10,
 	"depth": 60
 });
@@ -287,7 +293,7 @@ Parameter | Object | [Node Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").setNodeValue({
+myChart.setNodeValue({
 	"plotindex": 1,
 	"nodeindex": 2,
 	"value": 22
@@ -304,7 +310,7 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 Setting the series data for a single plot:
 ```javascript
-$("#myChart").setSeriesData({
+myChart.setSeriesData({
 	"plotindex": 1,
 	"data" : {
 		"values": [12, 33, 20],
@@ -315,7 +321,7 @@ $("#myChart").setSeriesData({
 
 Setting the series data for all plots:
 ```javascript
-$("#myChart").setSeriesData({
+myChart.setSeriesData({
 	"data": [
 		{
 			"values": [10,15,20],
@@ -339,7 +345,7 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 Setting the series values for a single plot:
 ```javascript
-$("#myChart").setSeriesValues({
+myChart.setSeriesValues({
 	"plotindex": 1,
 	"values": [99,98,97]
 });
@@ -347,7 +353,7 @@ $("#myChart").setSeriesValues({
 
 Setting the series values for all plots:
 ```javascript
-$("#myChart").setSeriesValues({
+myChart.setSeriesValues({
 	"values": [
 		[19,28,13,42],
 		[37,11,27,25]
@@ -365,7 +371,7 @@ Parameter |  |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").exportData();
+myChart.exportData();
 //Assuming the exportdataurl is set in the render options, the current data for the chart will be exported to that url.
 ```
 
@@ -379,13 +385,15 @@ Parameter | String | "png", "jpg", "bmp" (only if rendering in Flash)
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").getImageData("png");
+myChart.getImageData("png");
 
-// or
-$("#myChart").getImageData("jpg");
+// or...
 
-// or (if you're rendering via Flash)
-$("#myChart").getImageData("bmp");
+myChart.getImageData("jpg");
+
+// or (if you're rendering via Flash)...
+
+myChart.getImageData("bmp");
 ```
 
 <br>
@@ -399,7 +407,7 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
 // Results in the printer dialog opening on the page
-$("#myChart").print();
+myChart.print();
 ```
 
 <br>
@@ -413,7 +421,7 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
 // Assuming the exportimageurl is set in the render options, an image of the current chart will be exported to that url.
-$("#myChart").saveAsImage();
+myChart.saveAsImage();
 ```
 
 <br>
@@ -440,7 +448,7 @@ Parameter |  |
 Return | Number | Seconds (1,2,..) or Miliseconds (100,200,...)
 
 ```javascript
-var myInterval = $("#myChart").getInterval();
+var myInterval = myChart.getInterval();
 ```
 
 <br>
@@ -453,7 +461,7 @@ Parameter | Number | Seconds (1,2,...) or Miliseconds (100,200,...)
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").setInterval(500);
+myChart.setInterval(500);
 // Sets the feed update interval to 500ms (1/2 sec)
 ```
 
@@ -467,7 +475,7 @@ Parameter |  |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").startFeed();
+myChart.startFeed();
 ```
 
 <br>
@@ -480,9 +488,7 @@ Parameter |  |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").stopFeed();
-```javascript
-$("#myChart").stopFeed();
+myChart.stopFeed();
 ```
 
 <br>
@@ -496,10 +502,10 @@ Parameter | Object (OPTIONAL) | [Graph Object](http://www.zingchart.com/docs/api
 Return | String | The [chart type](http://www.zingchart.com/docs/chart-types/) in lowercase ("line", "pie", "area",...)
 
 ```javascript
-var myType = $("#myChart").getChartType();
+var myType = myChart.getChartType();
 // myType = the type of the chart at #myChart
 
-var indexOneType = $("#myChart").getChartType({
+var indexOneType = myChart.getChartType({
 	"graphid": 1
 });
 // indexOneType = the type of the chart at index 1 of #myChart
@@ -524,7 +530,7 @@ Parameter | |
 Return | Boolean | true if in edit more, false if not
 
 ```javascript
-if ( $("#myChart").getEditMode() ) {
+if ( myChart.getEditMode() ) {
 	alert("I am editing my chart")
 }
 
@@ -541,7 +547,7 @@ Parameter | |
 Return | Number | 1,2,...
 
 ```javascript
-var numberOfGraphs = $("#myChart").getGraphLength();
+var numberOfGraphs = myChart.getGraphLength();
 
 // numberOfGraphs = the number of graph objects in the chart
 ```
@@ -556,11 +562,11 @@ Parameter | Object (OPTIONAL) | [Plot Object](http://www.zingchart.com/docs/api/
 Return | Number | 1,2,...
 
 ```javascript
-var numberOfNodes = $("#myChart").getNodeLength();
+var numberOfNodes = myChart.getNodeLength();
 
 // numberOfNodes = the number of nodes in the 0 index plot
 
-var nodesInPlot = $("#myChart").getNodeLength({
+var nodesInPlot = myChart.getNodeLength({
 	"plotindex": 1
 });
 
@@ -577,7 +583,7 @@ Parameter | Object | [Node Object](http://www.zingchart.com/docs/api/api-methods
 Return | Number | 1,2,...
 
 ```javascript
-var myValue = $("#myChart").getNodeValue({
+var myValue = myChart.getNodeValue({
 	"plotindex": 1,
 	"nodeindex": 5
 });
@@ -594,7 +600,7 @@ Parameter | Object | [Info Object](http://www.zingchart.com/docs/api/api-methods
 Return | Object | Dependent on targeted object
 
 ```javascript
-$("#myChart").getObjectInfo({
+myChart.getObjectInfo({
 	"object": "graph"
 });
 
@@ -611,7 +617,7 @@ Parameter | Object (optional) | [Graph ID Object](http://www.zingchart.com/docs/
 Return | Number | 1,2,...
 
 ```javascript
-var myPlotLength = $("#myChart").getPlotLength();
+var myPlotLength = myChart.getPlotLength();
 
 // myPlotLength would then equal the number of plots in myChart
 ```
@@ -626,7 +632,7 @@ Parameter | Object | [Plot Object](http://www.zingchart.com/docs/api/api-methods
 Return | Array | ex: [12,23,45]
 
 ```javascript
-var myPlotValues = $("#myChart").getPlotValues({
+var myPlotValues = myChart.getPlotValues({
 	"plotindex": 0
 });
 
@@ -643,7 +649,7 @@ Parameter | |
 Return | String | "svg", "canvas", "vml"
 
 ```javascript
-var myRenderMode = $("#myChart").getRender();
+var myRenderMode = myChart.getRender();
 
 // myRenderMode = the render more of myChart
 ```
@@ -658,7 +664,7 @@ Parameter | Object | [Plot Object](http://www.zingchart.com/docs/api/api-methods
 Return | Array | ["rule1", "rule2"]
 
 ```javascript
-var myRules = $("#myChart").getRules({
+var myRules = myChart.getRules({
 	"plotindex": 0
 });
 
@@ -675,7 +681,7 @@ Parameter | |
 Return | String | ex: "0.141015pre"
 
 ```javascript
-var myVersion = $("#myChart").getVersion();
+var myVersion = myChart.getVersion();
 
 // myVersion = the version of the library you're currently running.
 ```
@@ -690,7 +696,7 @@ Parameter | Object | [XY Coords.](http://www.zingchart.com/docs/api/api-methods/
 Return | Array | [Object1, Object2, ...]
 
 ```javascript
-var myXYInfo = $("#myChart").getXYInfo({
+var myXYInfo = myChart.getXYInfo({
 	x: 100,
 	y: 200
 });
@@ -709,7 +715,7 @@ Parameter | Object | [Scale Object](http://www.zingchart.com/docs/api/api-method
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").addScaleValue({
+myChart.addScaleValue({
 	"scale": "scale-x",
 	"nodeindex": 4,
 	"value": 23
@@ -726,9 +732,9 @@ Parameter | |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").destroy();
+myChart.destroy();
 
-// jQuery Wrapper uses 'destroy'. It's super effective!
+// ZingChart jQuery Wrapper uses 'destroy'. It's super effective!
 ```
 
 <br>
@@ -741,7 +747,7 @@ Parameter | String | 'newjson.php', 'somedata.php', etc.
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").load("awholenewdata.php");
+myChart.load("awholenewdata.php");
 ```
 
 <br>
@@ -754,7 +760,7 @@ Parameter | Object | [Modify Data Object](http://www.zingchart.com/docs/api/api-
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").modify({
+myChart.modify({
 	"data": {
 		"title": {
 			"text": "Supermodified"
@@ -779,12 +785,12 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 Reloading the entire chart.
 ```javascript
-$("#myChart").reload();
+myChart.reload();
 ```
 
 Reloading a single graph of the chart.
 ```javascript
-$("#myChart").reload({
+myChart.reload({
 	"graphid": 0
 });
 ```
@@ -799,7 +805,7 @@ Parameter | Object | [Scale Object](http://www.zingchart.com/docs/api/api-method
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").removeScaleValue({
+myChart.removeScaleValue({
 	"scale": "scale-x",
 	"nodeindex": 4
 });
@@ -817,7 +823,7 @@ Parameter | Object | [Size Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").resize({
+myChart.resize({
 	"width": 600,
 	"height": 400
 });
@@ -835,7 +841,7 @@ Parameter | Object | [Data Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").setData({
+myChart.setData({
 	"data": {
 		"type": "bar",
 		"title": {
@@ -863,7 +869,7 @@ Parameter | |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").update();
+myChart.update();
 ```
 
 <br>
@@ -877,7 +883,7 @@ Parameter | |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").goBack();
+myChart.goBack();
 ```
 
 <br>
@@ -890,7 +896,7 @@ Parameter | |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").goForward();
+myChart.goForward();
 ```
 
 <br>
@@ -905,12 +911,12 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 For a non-bubble graph
 ```javascript
-$("#myChart").addNodeIA();
+myChart.addNodeIA();
 ```
 
 For a bubble graph
 ```javascript
-$("#myChart").addNodeIA({
+myChart.addNodeIA({
 	"size": 10
 });
 ```
@@ -925,7 +931,7 @@ Parameter | Object (optional) | [Graph ID](http://www.zingchart.com/docs/api/api
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").enterEditMode();
+myChart.enterEditMode();
 ```
 
 <br>
@@ -938,7 +944,7 @@ Parameter | Object (optional) | [Graph ID](http://www.zingchart.com/docs/api/api
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").exitEditMode();
+myChart.exitEditMode();
 ```
 
 <br>
@@ -951,7 +957,7 @@ Parameter | Object (optional) | [Graph ID](http://www.zingchart.com/docs/api/api
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").removeNodeIA();
+myChart.removeNodeIA();
 ```
 
 <br>
@@ -964,7 +970,7 @@ Parameter | Object (optional) | [Graph ID](http://www.zingchart.com/docs/api/api
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").removePlotIA();
+myChart.removePlotIA();
 ```
 
 <br>
@@ -982,7 +988,7 @@ Parameter | Object | [Note Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").addNote({
+myChart.addNote({
 	"id": "note1",
 	"type": "node",
 	"text": "I am a note. Hear me roar.",
@@ -1005,12 +1011,12 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 Removing a single note
 ```javascript
-$("#myChart").removeNote("note1");
+myChart.removeNote("note1");
 ```
 
 Removing multiple notes
 ```javascript
-$("#myChart").removeNote(["note1","note2","note3"]);
+myChart.removeNote(["note1","note2","note3"]);
 ```
 
 <br>
@@ -1019,11 +1025,11 @@ Updates an existing note specified by the **id** of the passed note object. The 
 
 Value | Type | Details
 --- | --- | ---
-Parameter | Object [Node Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__updatenote)
+Parameter | Object | [Node Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__updatenote)
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#myChart").updateNote({
+myChart.updateNote({
 	"id": "note1",
 	"style": {
 		"border-color": "#F7A93E"
@@ -1035,4 +1041,626 @@ $("#myChart").updateNote({
 
 <br>
 ## Objects ##
-#### .addObject( object )
+#### .addObject( object ) ####
+Adds one or more objects (labels or shapes) on the chart. Single objects are passed through within the **data** object. Multiple objects are passed through as an array of objects within the **data** object.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Shape/Label Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__addobject)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Adding a single object
+```javascript
+myChart.addObject({
+	"type": "label",
+	"data": {
+		"id": "label1",
+		"text": "Made in San Diego",
+		"x": 200,
+		"y":  100
+	}
+});
+```
+
+Adding multiple objects
+```javascript
+myChart.addObject({
+	"type": "shape",
+	"data":[
+		{
+			"id": "shape1",
+			"x": 100,
+			"y": 200,
+			"type": "circle",
+			"size": 20,
+			"label": {
+				"text": "I AM A CIRCLE!"
+			}
+		},
+		{
+			"id": "shape2",
+			"x": 200,
+			"y": 300,
+			"type": "star5",
+			"size": 15,
+			"label": {
+				"text": "I AM A STAR!"
+			}
+		}
+	]
+})
+```
+
+<br>
+#### .removeObject( object ) ####
+Removes one or more objects (labels or shapes) from the chart. 
+Adds one or more objects (labels or shapes) on the chart. Single objects are passed through with to the **id** attribute. Multiple objects are passed through as an array of objects to the **id** attribute.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Shape/Label Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__removeobject)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Removing a single object
+```javascript
+myChart.removeObject({
+	"type": "label",
+	"id": "label1"
+});
+```
+
+Removing multiple objects
+```javascript
+myChart.removeObject({
+	"type": "shape",
+	"id": ["shape1","shape2"]
+});
+```
+
+<br>
+#### .repaintObjects( object ) ####
+Repaints the entire object collection that was called with **update** set to **false** in the options. It's useful for deferring object changes if you want all the changes to appear at once.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object (optional) | [GraphID Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__repaintobjects)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.repaintObjects();
+```
+
+<br>
+#### .updateObject( object ) ####
+Updates one or more objects (labels or shapes) of the chart. Single objects are passed through within the **data** object. Multiple objects are passed through as an array of objects within the **data** object.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Shape/Label Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__updateobject)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Updating a single object
+```javascript
+myChart.updateObject({
+	"type": "label",
+	"data": {
+		"id": "label1",
+		"background-color": "pink"
+	}
+});
+```
+
+Updating multiple objects
+```javascript
+myChart.updateObject({
+	"type": "shapes",
+	"data": [
+		{
+			"id": "shape1",
+			"type": "square",
+			"label": {
+				"text": "I AM A SQUARE!"
+			}
+		},
+		{
+			"id": "shape2",
+			"type": "square",
+			"label": {
+				"text": "¡SOY UN CUADRADO!"
+			}
+		}
+	]
+});
+```
+
+<br>
+## Rules ##
+
+**Requires the zingchart-html5-api-rules-min.js module**
+
+***
+#### .addRule( object ) ####
+Adds a rule to a chart, applying the effect to any node that meets the conditions. The rules make use of the [various tokens](http://www.zingchart.com/docs/features/tokens/#tokens__rules) that ZingChart has available. [Visit here](http://www.zingchart.com/docs/features/tokens/#tokens__list) to see the full range of available tokens (be warned: there are lots).
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Rule Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__addrule)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.addRule({
+	"id": "rule1",
+	"plotindex": 0,
+	"rule": "%node-value < 50",
+	"style": {
+		"background-color": "#FF0"
+	}
+});
+
+// Now, any nodes with a value below 50 will have a background color of #FF0. Pretty simple!
+```
+
+<br>
+#### .removeRule( object ) ####
+Removes either a single rule or a series of rules from a chart.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Rule Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__removerule)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Removing a single rule.
+```javascript
+myChart.removeRule({
+	"id": "rule1"
+});
+
+// Poof. Rule1 is gone.
+```
+
+Removing multiple rules.
+```javascript
+myChart.removeRule({
+	"id": ["rule1","rule2",...]
+});
+```
+
+<br>
+#### .updateRule( object ) ####
+Update an existing rule, specified by the **id** and the **plotindex** if there are multiple plots.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Rule Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__updaterule)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.updateRule({
+	"id": "rule1",
+	"plotindex": 0,
+	"style": {
+		"background-color": "#F00 #00F"
+	}
+});
+
+// rule1 on plotindex 0 now has a background gradient from red to blue
+```
+
+<br>
+## Selection ##
+#### .clearSelection( object ) ####
+Clears the current node(s) selection. See the [plot series item](http://www.zingchart.com/docs/json-attributes-syntax/graph-objects/plot-series-item/) for more informatino on working with selections.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object (optional) | [GraphID Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__clearselection)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.clearSelection();
+
+// Any nodes specified by selection are now deselected.
+```
+
+<br>
+#### .deselect( object ) ####
+Deselects a combination of nodes in the chart specified by **plotindex** and **nodeindex**. Both the **nodeindex** and **plotindex** can be specified individually (0), as a range ("0-3"), or as a group ([0,2,6]).
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Select Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__deselect)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Deselecting from a single plot.
+```javascript
+myChart.deselect({
+	"plotindex":0,
+	"nodeindex":"1-3"
+});
+
+// Nodes at index 1-3 in plot 0 have been deselected.
+```
+
+Deselecting from multiple plots.
+```javascript
+myChart.deselect([
+	{
+		"plotindex":0,
+		"nodeindex":[0,2]
+	},
+	{
+		"plotindex":1,
+		"nodeindex":1
+	}
+]);
+
+// Nodes at index 0 and 2 in plot 0 and the node at index 1 in plot 1 have been deselected.
+```
+
+<br>
+#### .getSelection( object ) ####
+Returns the current node(s) selected.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object (optional) | [GraphID Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__getselection)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+mySelection = myChart.getSelection();
+```
+
+<br>
+#### .select( object ) ####
+Sets a combination of nodes in the chart if selected. If **toggle** is true, then the nodes already selected will be deselected. Both the **nodeindex** and **plotindex** can be specified individually aa number (0), as a range in a string ("0-3"), or as a group in an array ([0,2,6]).
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Select Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__select)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.select({
+	[
+		{
+			"plotindex":0,
+			"nodeindex":[0,2]
+		},
+		{
+			"plotindex":1,
+			"nodeindex":3
+		}
+	]
+})
+```
+
+<br>
+#### .setSelection( object ) ####
+Another method setting node selection of the chart. Selection is passed as an array of arrays where each array corresponds to a plotindex of the chart and each number in the array corresponds to a nodeindex in that plot.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Select Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__setselection)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.setSelection({
+	"selection": [
+		[1,2],
+		[0,3]
+	]
+});
+
+// The nodes at index 1 and 2 of plot index 0 are now selected as are the nodes at 0 and 3 of plot index 1.
+```
+
+<br>
+## Toggle ##
+#### .disable( string)  ####
+Disable makes the chart inactive for user interactions. This is useful in the case of time-consuming operations. An optional string can be passed through that will be displayed as a message on top of the disabled chart.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | String (optional) | [Disable Message](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__disable)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.disable("Waiting on the world to change...");
+
+// Disclaimer: you don't have to use John Mayer lyrics in your disable message but no one would fault you if you did.
+```
+
+<br>
+#### .enable() ####
+Enables a chart for user interactions, turning off the disabled attribute.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.enable();
+```
+<br>
+#### .fullscreen() ####
+Randers the chart in fullscreen. Can be exited with .exitFullscreen() or hitting the escape key.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.fullscreen();
+```
+
+<br>
+#### .exitFullscreen() ####
+Destroys the fullscreen render of the chart.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.exitFullscreen();
+```
+
+<br>
+#### .maximizeLegend() ####
+Maximizes the legend.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.maximizeLegend();
+```
+
+<br>
+#### .minimizeLegend() ####
+Minimizes the legend.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.minimizeLegend();
+```
+
+<br>
+#### .showMenu() ####
+Shows the context menu.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.showMenu();
+```
+
+<br>
+#### .hideMenu() ####
+Hides the context menu.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.hideMenu();
+```
+
+<br>
+#### .showPlot( object ) ####
+Shows the plot specified by **plotindex** or **plotid**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Plot Index Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__showplot)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.showPlot({
+	"plotindex": 1
+});
+```
+
+<br>
+#### .hidePlot( object ) ####
+Hides the plot specified by **plotindex** or **plotid**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Plot Index Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__hideplot)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.hidePlot({
+	"plotindex": 1
+});
+```
+
+<br>
+#### .toggleAbout() ####
+Toggle the 'About' screen on and off.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.toggleAbout();
+```
+
+<br>
+#### .toggleBugReport() ####
+Toggle the 'Bug Report' screen on an off.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.toggleBugReport();
+```
+
+<br>
+#### .toggleDimension() ####
+For graphs with the option of 3D mode, toggles between 2D and 3D.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.toggleDimension();
+```
+
+<br>
+#### .toggleLegend() ####
+Toggle the visibility of the legend.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.toggleLegend();
+```
+
+<br>
+#### .toggleLens() ####
+Toggle the visibility of the lens.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.toggleLens();
+```
+
+<br>
+#### .toggleSource() ####
+Toggle the visibility of the View Source Screen.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.toggleSource();
+```
+
+<br>
+## Zoom ##
+#### .viewAll() ####
+Resets the zoom of the chart to 'view all'. Big surprise, eh?
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.viewAll();
+```
+
+<br>
+#### .zoomIn( object ) ####
+Zooms in the graph. **zoomx** and **zoomy** allow you to determine which scales will zoom by setting them to ```true``` or ```false```.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Zoom Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__zoomin)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.zoomIn({
+	"zoomx": true,
+	"zoomy": false
+});
+
+// The chart will now zoom in only by scaling the x-scale.
+```
+
+<br>
+#### .zoomOut( object ) ####
+Zooms out the graph. **zoomx** and **zoomy** allow you to determine which scales will zoom out by setting them to ```true``` or ```false```.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Zoom Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__zoomout)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.zoomOut({
+	"zoomx": false,
+	"zoomy": true
+});
+
+// The chart will now zoom out only by scaling the y-scale.
+```
+
+<br>
+#### .zoomTo( object ) ####
+Zooms to a specific area in a graph specified by **xmin**, **xmax**, **ymin**, **ymax**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Zoom To Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__zoomto)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.zoomTo({
+	"xmin": 10,
+	"xmax": 30,
+	"ymin": 12,
+	"ymax": 17
+});
+
+// The chart will now be zoomed in to show
+// values 10 through 30 on the x-scale and 
+// values 12 through 17 on the y scale.
+```
+
+<br>
+#### .zoomToValues( object ) ####
+Zooms to a specific area in a graph specified by x-scale values or labels. Use this option when you're x-axis doesn't use numbers (i.e. months, names, etc).
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Zoom To Values Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__zoomtovalues)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+myChart.zoomToValues({
+	"xmin": "Feb",
+	"xmax": "Apr",
+	"ymin": 200,
+	"ymax": 300
+});
+
+// The chart will now be zoomed in to show
+// values "Feb" through "Apr" on the x-scale 
+// and values 200 through 300 on the y scale.
+```
+
+<br>
+# Events[](#events) #

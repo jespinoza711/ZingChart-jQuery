@@ -6,6 +6,8 @@
 	<script src="../zingchart-html5-min.js"></script>
 	
 	<script src="../zingchart.jquery.js"></script>
+	<!--<script src="../zingevents_v2.js"></script>-->
+	<!--<script src="../zingchart.jquery_JTJ.js"></script>-->
 	
 
 	<script>
@@ -19,21 +21,140 @@
 					{ values: [3,5,7,9,10,12] }
 				]
 			};
-			$('#ex_1').zingchart( { data: data } );
 
-
-			// example two
-			var ex2 = $('#ex_2').zingchart( { data: data } );
-			$('#ex_2_button').click( function() {
-				ex2.modify({ data: { type:"scatter" } });
+			var mychart = $('#ex_1').zingchart({data: data});
+			// mychart.nodeClick(function(){
+			// 	console.log(this);
+			// });
+			//console.log(mychart);
+			$("#mybutton").click(function(){
+				mychart.toggleAbout();
+				console.log("!!!");
 			});
 
+			// example two
+			var ex2 = $('#ex_2').zingchart(data);
+			//ex2.complete(console.log('donezo'));
+			$('#ex_2_button').click( function() {
+				ex2.addNode({
+					plotindex : 1,
+					nodeindex : 2,
+					value : 37;
+				});
+			});
+			
 
 			// example three
-			var ex3 = $('#ex_3').zingchart( { data: data } );
+			$('#ex_3').zingchart(data);
 			$('#ex_3_button').click( function() {
 				ex3.modify({ data: { type: 'area' } }).title( 'new title' );
 			});
+			/*
+			$( "#ex_1" ).plotmouseover(function (chart) {
+				$("#ex_1").modifyplot({
+					plotindex: chart.plotindex,
+					data: {
+						lineWidth: 5,
+						lineColor: "yellow"
+					}
+				});
+			});
+			*/
+			
+			/*
+			$( "#ex_1" ).plothover(1, function () {
+				$("#ex_1").modifyplot({
+					plotindex: 1,
+					data: {
+						lineWidth: 5,
+						lineColor: "yellow"
+					}
+				});
+			});
+			*/
+		
+			/*
+			$("#ex_1").nodeClick(function() {
+				$(this).setNodeValue({
+					plotindex: this.plotindex,
+					nodeindex: this.nodeindex,
+					value: Math.floor(Math.random()*13)
+				})
+			});
+			*/
+
+			/*
+			$("#ex_1").nodeMouseOver(function() {
+				$("#ex_1").setNodeValue({
+					plotindex: this.plotindex,
+					nodeindex: this.nodeindex,
+					value: Math.floor(Math.random()*11)
+				})
+			});
+			*/
+
+			/*
+			$( "#ex_1" ).plotMouseOver(function() {
+				console.log("off");
+			});
+			$( "#ex_1" ).plotMouseOut(function() {
+				console.log("off");
+			})
+			*/
+		
+			/*
+				$("#newVal").val(chart.value);
+				var plotIndex = chart.plotindex;
+				var nodeIndex = chart.nodeindex;
+				var nodeval = chart.value;
+				var newNodeIndex = nodeIndex + 1;
+				dialog.dialog( "open" );
+
+				$("#addBefore").click(function(){
+					var newVal = parseInt($("#newVal").val());
+					$("#ex_1").addnode({
+						"plotindex": plotIndex,
+						"nodeindex": nodeIndex,
+						"value": newVal
+					});
+					dialog.dialog( "close" );
+					return
+				});
+
+				$("#addAfter").click(function(){
+					//var newVal = parseInt($("#newVal").val());
+					$("#ex_1").addnode({
+						"plotindex": plotIndex,
+						"nodeindex": newNodeIndex,
+						"value": nodeval
+					});
+					//console.log(plotIndex + "," + newNodeIndex + "," + newVal);
+					dialog.dialog( "close" );
+					return
+				});
+
+				$("#changeVal").click(function(){
+					var newVal = parseInt($("#newVal").val());
+					$("#ex_1").setnodevalue({
+						"plotindex": plotIndex,
+						"nodeindex": nodeIndex,
+						"value": newVal
+					});
+					dialog.dialog( "close" );
+					return
+				});
+
+				$("#deleteNode").click(function(){
+					$("#ex_1").removenode({
+						"plotindex": plotIndex,
+						"nodeindex": nodeIndex
+					});
+					dialog.dialog( "close" );
+					return
+				});
+
+			});
+			*/	
 		});
 	</script>
 </head>
@@ -66,11 +187,6 @@
 	<p>The data has now been rendered in the '#myDiv' element. In most cases though, you'll probably want to save the ZingChart jQuery object 
 		you've just created to manipulate it later, e.g.:</p>
 	<pre>var myChart = $('#myDiv').zingchart({ data: data });</pre>
-
-
-
-
-
 	<h1>Example 2: Executing functions on the ZingChart jQuery object</h1>
 	<p>Once you've created a zingchart object, you can execute function on it in regular jQuery fashion.</p>
 	<pre>
@@ -92,12 +208,6 @@
 	</pre>
 	<button id="ex_2_button">set new data</button>
 	<div id="ex_2" class="zingchart"></div>
-	
-
-
-
-
-	
 	<h1>Example 3: Chaining on your ZingChart object</h1>
 	<p>The returned ZingChart object can be chained just like a regular jQuery object. This allows you to do something like:</p>
 	<pre>
@@ -109,47 +219,6 @@
 	</pre>
 	<button id="ex_3_button">change to area and reset title</button>
 	<div id="ex_3" class="zingchart"></div>
-	     
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	<div id='one'></div>
 	<div id='two'></div>
 	
