@@ -3,160 +3,223 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="../zingchart-html5-min.js"></script>
+	<script src="../zingchart-html5-min_DEBUG.js"></script>
 	
-	<script src="../zingchart.jquery.js"></script>
-	<!--<script src="../zingevents_v2.js"></script>-->
-	<!--<script src="../zingchart.jquery_JTJ.js"></script>-->
+	<!--<script src="../zingchart.jquery.js"></script>-->
+	<script src="../zingevents_extend_this.js"></script>
 	
 
 	<script>
 		$(document).ready( function() {
 			// example one
 			var data = {
-				type: 'line',
-				title: { text: 'zingchart w/ jquery' },
-				series: [ 
-					{ values: [5,3,1,7,7,6] },
-					{ values: [3,5,7,9,10,12] }
+				"type": "bar",
+				"legend":{},
+				"series": [
+					{
+					  "values": [5,10,15,5,10,5]
+					},
+					{
+					  "values": [10,5,10,10,5,10]
+					},
+					{
+					  "values": [1,15,3,6,9,12]
+					},
+					{
+					  "values": [4,7,9,1,2,1]
+					},
 				]
 			};
 
-			var mychart = $('#ex_1').zingchart({data: data});
-			// mychart.nodeClick(function(){
-			// 	console.log(this);
-			// });
-			//console.log(mychart);
-			$("#mybutton").click(function(){
-				mychart.toggleAbout();
-				console.log("!!!");
+			function makeRandomType(){
+				var randomTypes = ["line","bar","hbar","piano","area","scatter"];
+				var idx = Math.floor(Math.random()*randomTypes.length);
+				console.log(randomTypes[idx]);
+				return randomTypes[idx];
+			}
+
+			$('#ex_1').zingchart({data:data}).nodeClick(function(){
+				$(this).setType(makeRandomType());
 			});
 
 			// example two
-			var ex2 = $('#ex_2').zingchart(data);
-			//ex2.complete(console.log('donezo'));
-			$('#ex_2_button').click( function() {
-				ex2.addNode({
-					plotindex : 1,
-					nodeindex : 2,
-					value : 37;
+			var ex2_Data = {
+				"graphset":[
+				    {
+				        "type":"bar",
+				        "background-color":"transparent",
+				        "plotarea":{
+				            "margin-top":20
+				        },
+				        "plot":{
+				            "bars-overlap":"100%",
+				            "bar-width":"100%",
+				            "color":"#838383",
+				            "bar-space":"0px",
+				            "padding":"0",
+				            "hover-state":{
+				                "background-color":"none"
+				            }
+				        },
+				        "series":[
+				            {
+				                "values":[20,20,20,20,20],
+				                "background-color":"#bbb",
+				                "value-box":{
+				                    "visible":0
+				                },
+				                "tooltip":{
+				                    "visible":0
+				                },
+				                "max-trackers":0
+				            },
+				            {
+				                "values":[["STRONG<br>BUY",5],
+				                ["BUY",6],
+				                ["HOLD",10],
+				                ["SELL",3],
+				                ["STRONG<br>SELL",7]],
+				                "tooltip":{
+				                    "visible":0,
+				                    "text":"%v",
+				                    "font-size":20,
+				                    "color":"white",
+				                    "background-color":"#444",
+				                    "callout":1,
+				                    "shadow":0,
+				                    "border-radius":5,
+				                    "width":36,
+				                    "padding":6,
+				                    "offset-y":-10,
+				                    "hook":"node:plot=1;index=3"
+				                },
+				                "z-index":2,
+				                "styles":[
+				                    {
+				                        "background-color":"#84D7E8"
+				                    },
+				                    {
+				                        "background-color":"#84D7E8"
+				                    },
+				                    {
+				                        "background-color":"#84D7E8"
+				                    },
+				                    {
+				                        "background-color":"#84D7E8"
+				                    },
+				                    {
+				                        "background-color":"#84D7E8"
+				                    }
+				                ]
+				            }
+				        ],
+				        "scale-x":{
+				            "line-color":"none",
+				            "line-width":"3px",
+				            "tick":{
+				                "visible":false
+				            },
+				            "guide":{
+				                "visible":false
+				            },
+				            "padding":"0",
+				            "item":{
+				                "color":"#838383",
+				                "font-size":10,
+				                "font-weight":"bold",
+				                "font-family":"Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif"
+				            }
+				        },
+				        "scale-y":{
+				            "visible":"false",
+				            "guide":{
+				                "visible":false
+				            },
+				            "padding":"0"
+				        },
+				        "-title":{
+				            "text":"Recommendation",
+				            "background-color":"none",
+				            "color":"#838383",
+				            "y":"0%",
+				            "x":"7%",
+				            "text-align":"left",
+				            "font-family":"Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif"
+				        }
+				    }
+				],
+				"tween":null
+			};
+			$('#ex_2').zingchart({data:ex2_Data});
+
+			function makeLabel(x) {
+				return {
+					"visible":1,
+				    "id":"label1",
+				    "text":x.event.value,
+				    "font-size":"20px",
+				    "color":"white",
+				    "background-color":"#444",
+				    "callout":1,
+				    "shadow":0,
+				    "border-radius":5,
+				    "width":36,
+				    "padding":6,
+				    "offset-y":-30,
+				    "hook":"node:plot="+x.event.plotindex+";index="+x.event.nodeindex
+				}
+			}
+
+			function componentToHex(c) {
+			    var hex = c.toString(16);
+			    return hex.length == 1 ? "0" + hex : hex;
+			}
+
+			function rgbToHex(r, g, b) {
+			    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+			}
+
+			function OMG_RAINBOWS(i){
+				var red = Math.round(Math.sin(.3*i)*127+128);
+				var green = Math.round(Math.sin(.3*i+2)*127+128);
+				var blue = Math.round(Math.sin(.3*i+4)*127+128);
+				return rgbToHex(red,green,blue);
+			}
+
+			$("#ex_2").nodeMouseOver(function(){
+				$(this).addLabel(makeLabel(this));
+			}).labelHover(function(){
+				$(this).updateLabel({
+					"id": "label1",
+					"background-color":"#FFF",
+					"color":"#444"
+				});
+			}, function(){
+				$(this).updateLabel({
+					"id":"label1",
+					"background-color":"#444",
+					"color":"#FFF"
 				});
 			});
-			
+
+			/*
+			$("#ex_2").nodeHover(
+				function(){
+					$(this).addLabel(makeLabel(this));
+				},
+				function(){
+					$(this).removeLabel("label1");
+				}
+			);
+			*/
 
 			// example three
-			$('#ex_3').zingchart(data);
+			$('#ex_3').zingchart({data:data});
 			$('#ex_3_button').click( function() {
-				ex3.modify({ data: { type: 'area' } }).title( 'new title' );
 			});
-			/*
-			$( "#ex_1" ).plotmouseover(function (chart) {
-				$("#ex_1").modifyplot({
-					plotindex: chart.plotindex,
-					data: {
-						lineWidth: 5,
-						lineColor: "yellow"
-					}
-				});
-			});
-			*/
-			
-			/*
-			$( "#ex_1" ).plothover(1, function () {
-				$("#ex_1").modifyplot({
-					plotindex: 1,
-					data: {
-						lineWidth: 5,
-						lineColor: "yellow"
-					}
-				});
-			});
-			*/
-		
-			/*
-			$("#ex_1").nodeClick(function() {
-				$(this).setNodeValue({
-					plotindex: this.plotindex,
-					nodeindex: this.nodeindex,
-					value: Math.floor(Math.random()*13)
-				})
-			});
-			*/
-
-			/*
-			$("#ex_1").nodeMouseOver(function() {
-				$("#ex_1").setNodeValue({
-					plotindex: this.plotindex,
-					nodeindex: this.nodeindex,
-					value: Math.floor(Math.random()*11)
-				})
-			});
-			*/
-
-			/*
-			$( "#ex_1" ).plotMouseOver(function() {
-				console.log("off");
-			});
-			$( "#ex_1" ).plotMouseOut(function() {
-				console.log("off");
-			})
-			*/
-		
-			/*
-				$("#newVal").val(chart.value);
-				var plotIndex = chart.plotindex;
-				var nodeIndex = chart.nodeindex;
-				var nodeval = chart.value;
-				var newNodeIndex = nodeIndex + 1;
-				dialog.dialog( "open" );
-
-				$("#addBefore").click(function(){
-					var newVal = parseInt($("#newVal").val());
-					$("#ex_1").addnode({
-						"plotindex": plotIndex,
-						"nodeindex": nodeIndex,
-						"value": newVal
-					});
-					dialog.dialog( "close" );
-					return
-				});
-
-				$("#addAfter").click(function(){
-					//var newVal = parseInt($("#newVal").val());
-					$("#ex_1").addnode({
-						"plotindex": plotIndex,
-						"nodeindex": newNodeIndex,
-						"value": nodeval
-					});
-					//console.log(plotIndex + "," + newNodeIndex + "," + newVal);
-					dialog.dialog( "close" );
-					return
-				});
-
-				$("#changeVal").click(function(){
-					var newVal = parseInt($("#newVal").val());
-					$("#ex_1").setnodevalue({
-						"plotindex": plotIndex,
-						"nodeindex": nodeIndex,
-						"value": newVal
-					});
-					dialog.dialog( "close" );
-					return
-				});
-
-				$("#deleteNode").click(function(){
-					$("#ex_1").removenode({
-						"plotindex": plotIndex,
-						"nodeindex": nodeIndex
-					});
-					dialog.dialog( "close" );
-					return
-				});
-
-			});
-			*/	
 		});
 	</script>
+
 </head>
 <body>
 	
@@ -187,6 +250,11 @@
 	<p>The data has now been rendered in the '#myDiv' element. In most cases though, you'll probably want to save the ZingChart jQuery object 
 		you've just created to manipulate it later, e.g.:</p>
 	<pre>var myChart = $('#myDiv').zingchart({ data: data });</pre>
+
+
+
+
+
 	<h1>Example 2: Executing functions on the ZingChart jQuery object</h1>
 	<p>Once you've created a zingchart object, you can execute function on it in regular jQuery fashion.</p>
 	<pre>
@@ -208,6 +276,12 @@
 	</pre>
 	<button id="ex_2_button">set new data</button>
 	<div id="ex_2" class="zingchart"></div>
+	
+
+
+
+
+	
 	<h1>Example 3: Chaining on your ZingChart object</h1>
 	<p>The returned ZingChart object can be chained just like a regular jQuery object. This allows you to do something like:</p>
 	<pre>
@@ -219,8 +293,48 @@
 	</pre>
 	<button id="ex_3_button">change to area and reset title</button>
 	<div id="ex_3" class="zingchart"></div>
+	     
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	<div id='one'></div>
 	<div id='two'></div>
-	
 </body>
 </html>

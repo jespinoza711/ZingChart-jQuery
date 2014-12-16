@@ -1,5 +1,0 @@
-# NEW FEATURES
-
-* Async data load with formatting function
-* Hide plots with "all but plotindex n" option
-* Show plots with "all but plotindex n" option

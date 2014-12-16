@@ -20,29 +20,39 @@ Looking for more info? Check out any of the below tutorials to get up to speed o
 
 Basics
 ------
-The ZingChart jQuery wrapper works just like normal jQuery. Each method or event is tacked on to the standard jQuery selector method. Here's an example of creating a ZingChart object on a div with an ID of "myChart":
+Step One is to make sure you have [jQuery loaded](http://jquery.com/download/). This wrapper won't work without it.
+
+The ZingChart jQuery wrapper works just like normal jQuery. Each method or event is tacked on to the standard jQuery selector method. All methods should be placed inside a ``` $(document).ready() ``` call to ensure the DOM is fully loaded. Here's an example of creating a ZingChart object on a div with an ID of "$("#myChart")":
 
 ```javascript
-$("#myChart").zingchart({
-	"type": "line",
-	"series": [
-		{
-			"values": [1,2,5,3,9,4]
+$(document).ready(function() {
+	$("#myChart").zingchart({
+		"data":{
+			"type": "line",
+			"series": [
+				{
+					"values": [1,2,5,3,9,4]
+				}
+			]
 		}
-	]
-});
+	});
+})
 ```
+> For the sake of brevity, the rest of the examples will omit the ``` $(document).ready() ``` wrapper. That being said, you still need to include it when using this library.
+
 All of the methods which take an object as a parameter can have it passed through directly or by reference. Both are equivalent.
 
 **Directly**
 ```javascript
 $("#myChart").zingchart({
-	"type": "bar",
-	"series": [
-		{
-			"values": [3,7,9,2]
-		}
-	]
+	"data": {
+		"type": "bar",
+		"series": [
+			{
+				"values": [3,7,9,2]
+			}
+		]
+	}
 });
 ```
 **Reference**
@@ -56,33 +66,22 @@ var myData = {
 	]
 };
 
-$("#myChart").zingchart(myData);
+$("#myChart").zingchart({data: myData});
 ```
 Woohoo! Congrats! You've just made your first ZingChart. Pretty straightforward, isn't it? Now we get into the nitty gritty of the API: how to make your chart do stuff.
-
-To keep jQuery method blocking low, this wrapper only occupies one method "slot": .zingchart(); All other methods are done by accessing the individual ZingChart objects. To access your zingchart objects, just assign a variable to the chart at render time like so...
-
-```javascript
-var myChart = $("#myChart").zingchart({
-	type: "bar",
-	series: [
-		{
-			values: [3,7,9,2]
-		}
-	]
-});
-```
-Sweetness. Our newly-rendered chart can now be accessed through the 'myChart' variable. We'll use that as the demo variable name for all examples below. Let's get down to business with the API.
 
 Chaining
 --------
 One of the more user-friendly aspects of jQuery is the chaining of functions, allowing for users to specify the target once but call multiple functions that affect it. This wrapper supports chaining for any methods or events that return a jQuery object. For example, say you want to set a chart to the 3D view and resize it. Instead of calling each method on the chart separately, you could chain them like this:
 
 ```javascript
-myChart.set3dView({"y-angle":10}).resizeChart({"width":600,"height":400});
+$("#myChart").set3dView({"y-angle":10}).resizeChart({"width":600,"height":400});
 ```
-myChart is now set to a 3D view and resized in just one line of code!
+$("#myChart") is now set to a 3D view and resized in just one line of code!
 Pat yourself on the back for saving time by using chaining. You're a rockstar!
+
+<br>
+**An Important Note**: many of the event functions may be very similar in name to the method functions and vice versa. This is intentional. The differentiation between the method functions and the event functions is that the ***method*** functions always start with a ***verb***: the action they're performing, while the ***event*** functions always start with a ***noun***: the object they're watching.
 
 <br>
 # Methods[](#methods) #
@@ -97,7 +96,7 @@ Parameter | Object | [ZingChart Object](http://www.zingchart.com/docs/reference/
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-var myChart = $("#myChart").zingchart({
+$("#myChart").zingchart({
 	"type": "line",
 	"title": {
 		"text": "Hello, ZingChart World!"
@@ -107,7 +106,7 @@ var myChart = $("#myChart").zingchart({
 			"values": [5, 10, 15, 5, 10, 5]
 		}
 	]
-})
+});
 ```
 <br>
 ## Data Manipulation ##
@@ -120,7 +119,7 @@ Parameter | Object | [Node Object](http://www.zingchart.com/docs/api/api-methods
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("#mychart").addNode({
+$("#myChart").addNode({
 	"plotindex": 1,
 	"nodeindex": 2,
 	"value": 12
@@ -381,10 +380,12 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 ```javascript
 $("#myChart").getImageData("png");
 
-// or
+// or...
+
 $("#myChart").getImageData("jpg");
 
-// or (if you're rendering via Flash)
+// or (if you're rendering via Flash)...
+
 $("#myChart").getImageData("bmp");
 ```
 
@@ -427,7 +428,7 @@ Parameter |  |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("$myChart").clearFeed();
+$("$$("#myChart")").clearFeed();
 ```
 
 <br>
@@ -481,8 +482,6 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
 $("#myChart").stopFeed();
-```javascript
-$("#myChart").stopFeed();
 ```
 
 <br>
@@ -497,12 +496,12 @@ Return | String | The [chart type](http://www.zingchart.com/docs/chart-types/) i
 
 ```javascript
 var myType = $("#myChart").getChartType();
-// myType = the type of the chart at #myChart
+// myType = the type of the chart at #$("#myChart")
 
 var indexOneType = $("#myChart").getChartType({
 	"graphid": 1
 });
-// indexOneType = the type of the chart at index 1 of #myChart
+// indexOneType = the type of the chart at index 1 of #$("#myChart")
 ```
 
 <br>
@@ -613,7 +612,7 @@ Return | Number | 1,2,...
 ```javascript
 var myPlotLength = $("#myChart").getPlotLength();
 
-// myPlotLength would then equal the number of plots in myChart
+// myPlotLength would then equal the number of plots in $("#myChart")
 ```
 
 <br>
@@ -645,7 +644,7 @@ Return | String | "svg", "canvas", "vml"
 ```javascript
 var myRenderMode = $("#myChart").getRender();
 
-// myRenderMode = the render more of myChart
+// myRenderMode = the render more of $("#myChart")
 ```
 
 <br>
@@ -728,7 +727,7 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 ```javascript
 $("#myChart").destroy();
 
-// jQuery Wrapper uses 'destroy'. It's super effective!
+// ZingChart jQuery Wrapper uses 'destroy'. It's super effective!
 ```
 
 <br>
@@ -765,11 +764,11 @@ $("#myChart").modify({
 	}
 });
 
-// The title of myChart is now "Supermodified" and the subtitle is now "by Amon Tobin"
+// The title of $("#myChart") is now "Supermodified" and the subtitle is now "by Amon Tobin"
 ```
 
 <br>
-#### .reload( object ) ####
+#### .reloadChart( object ) ####
 If an object is passed through specifying the **graphid** of a graph, only that graph will be reloaded. If no object is passed through, the entire chart is reloaded.
 
 Value | Type | Details
@@ -779,7 +778,7 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 Reloading the entire chart.
 ```javascript
-$("#myChart").reload();
+$("#myChart").reloadChart();
 ```
 
 Reloading a single graph of the chart.
@@ -1019,7 +1018,7 @@ Updates an existing note specified by the **id** of the passed note object. The 
 
 Value | Type | Details
 --- | --- | ---
-Parameter | Object [Node Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__updatenote)
+Parameter | Object | [Node Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__updatenote)
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
@@ -1035,4 +1034,2105 @@ $("#myChart").updateNote({
 
 <br>
 ## Objects ##
-#### .addObject( object )
+#### .addObject( object ) ####
+Adds one or more objects (labels or shapes) on the chart. Single objects are passed through within the **data** object. Multiple objects are passed through as an array of objects within the **data** object.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Shape/Label Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__addobject)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Adding a single object
+```javascript
+$("#myChart").addObject({
+	"type": "label",
+	"data": {
+		"id": "label1",
+		"text": "Made in San Diego",
+		"x": 200,
+		"y":  100
+	}
+});
+```
+
+Adding multiple objects
+```javascript
+$("#myChart").addObject({
+	"type": "shape",
+	"data":[
+		{
+			"id": "shape1",
+			"x": 100,
+			"y": 200,
+			"type": "circle",
+			"size": 20,
+			"label": {
+				"text": "I AM A CIRCLE!"
+			}
+		},
+		{
+			"id": "shape2",
+			"x": 200,
+			"y": 300,
+			"type": "star5",
+			"size": 15,
+			"label": {
+				"text": "I AM A STAR!"
+			}
+		}
+	]
+})
+```
+
+<br>
+#### .removeObject( object ) ####
+Removes one or more objects (labels or shapes) from the chart. 
+Adds one or more objects (labels or shapes) on the chart. Single objects are passed through with to the **id** attribute. Multiple objects are passed through as an array of objects to the **id** attribute.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Shape/Label Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__removeobject)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Removing a single object
+```javascript
+$("#myChart").removeObject({
+	"type": "label",
+	"id": "label1"
+});
+```
+
+Removing multiple objects
+```javascript
+$("#myChart").removeObject({
+	"type": "shape",
+	"id": ["shape1","shape2"]
+});
+```
+
+<br>
+#### .repaintObjects( object ) ####
+Repaints the entire object collection that was called with **update** set to **false** in the options. It's useful for deferring object changes if you want all the changes to appear at once.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object (optional) | [GraphID Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__repaintobjects)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").repaintObjects();
+```
+
+<br>
+#### .updateObject( object ) ####
+Updates one or more objects (labels or shapes) of the chart. Single objects are passed through within the **data** object. Multiple objects are passed through as an array of objects within the **data** object.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Shape/Label Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__updateobject)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Updating a single object
+```javascript
+$("#myChart").updateObject({
+	"type": "label",
+	"data": {
+		"id": "label1",
+		"background-color": "pink"
+	}
+});
+```
+
+Updating multiple objects
+```javascript
+$("#myChart").updateObject({
+	"type": "shapes",
+	"data": [
+		{
+			"id": "shape1",
+			"type": "square",
+			"label": {
+				"text": "I AM A SQUARE!"
+			}
+		},
+		{
+			"id": "shape2",
+			"type": "square",
+			"label": {
+				"text": "¡SOY UN CUADRADO!"
+			}
+		}
+	]
+});
+```
+
+<br>
+## Labels ##
+#### .addLabel( object ) ####
+Adds a single label to the chart. This is just a shortcut from addObject.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Label Object](http://www.zingchart.com/docs/json-attributes-syntax/graph-objects/labels/)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").addLabel({
+	"id": "label1",
+	"text":"Donde esta la biblioteca?",
+    "font-size":"20px",
+    "color":"white",
+    "background-color":"pink",
+    "x":20,
+    "y":20
+});
+```
+
+<br>
+## Rules ##
+
+**Requires the zingchart-html5-api-rules-min.js module**
+
+***
+#### .addRule( object ) ####
+Adds a rule to a chart, applying the effect to any node that meets the conditions. The rules make use of the [various tokens](http://www.zingchart.com/docs/features/tokens/#tokens__rules) that ZingChart has available. [Visit here](http://www.zingchart.com/docs/features/tokens/#tokens__list) to see the full range of available tokens (be warned: there are lots).
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Rule Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__addrule)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").addRule({
+	"id": "rule1",
+	"plotindex": 0,
+	"rule": "%node-value < 50",
+	"style": {
+		"background-color": "#FF0"
+	}
+});
+
+// Now, any nodes with a value below 50 will have a background color of #FF0. Pretty simple!
+```
+
+<br>
+#### .removeRule( object ) ####
+Removes either a single rule or a series of rules from a chart.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Rule Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__removerule)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Removing a single rule.
+```javascript
+$("#myChart").removeRule({
+	"id": "rule1"
+});
+
+// Poof. Rule1 is gone.
+```
+
+Removing multiple rules.
+```javascript
+$("#myChart").removeRule({
+	"id": ["rule1","rule2",...]
+});
+```
+
+<br>
+#### .updateRule( object ) ####
+Update an existing rule, specified by the **id** and the **plotindex** if there are multiple plots.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Rule Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__updaterule)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").updateRule({
+	"id": "rule1",
+	"plotindex": 0,
+	"style": {
+		"background-color": "#F00 #00F"
+	}
+});
+
+// rule1 on plotindex 0 now has a background gradient from red to blue
+```
+
+<br>
+## Selection ##
+#### .clearSelection( object ) ####
+Clears the current node(s) selection. See the [plot series item](http://www.zingchart.com/docs/json-attributes-syntax/graph-objects/plot-series-item/) for more informatino on working with selections.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object (optional) | [GraphID Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__clearselection)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").clearSelection();
+
+// Any nodes specified by selection are now deselected.
+```
+
+<br>
+#### .deselect( object ) ####
+Deselects a combination of nodes in the chart specified by **plotindex** and **nodeindex**. Both the **nodeindex** and **plotindex** can be specified individually (0), as a range ("0-3"), or as a group ([0,2,6]).
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Select Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__deselect)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Deselecting from a single plot.
+```javascript
+$("#myChart").deselect({
+	"plotindex":0,
+	"nodeindex":"1-3"
+});
+
+// Nodes at index 1-3 in plot 0 have been deselected.
+```
+
+Deselecting from multiple plots.
+```javascript
+$("#myChart").deselect([
+	{
+		"plotindex":0,
+		"nodeindex":[0,2]
+	},
+	{
+		"plotindex":1,
+		"nodeindex":1
+	}
+]);
+
+// Nodes at index 0 and 2 in plot 0 and the node at index 1 in plot 1 have been deselected.
+```
+
+<br>
+#### .getSelection( object ) ####
+Returns the current node(s) selected.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object (optional) | [GraphID Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__getselection)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+mySelection = $("#myChart").getSelection();
+```
+
+<br>
+#### .select( object ) ####
+Sets a combination of nodes in the chart if selected. If **toggle** is true, then the nodes already selected will be deselected. Both the **nodeindex** and **plotindex** can be specified individually aa number (0), as a range in a string ("0-3"), or as a group in an array ([0,2,6]).
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Select Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__select)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").select({
+	[
+		{
+			"plotindex":0,
+			"nodeindex":[0,2]
+		},
+		{
+			"plotindex":1,
+			"nodeindex":3
+		}
+	]
+})
+```
+
+<br>
+#### .setSelection( object ) ####
+Another method setting node selection of the chart. Selection is passed as an array of arrays where each array corresponds to a plotindex of the chart and each number in the array corresponds to a nodeindex in that plot.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Select Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__setselection)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").setSelection({
+	"selection": [
+		[1,2],
+		[0,3]
+	]
+});
+
+// The nodes at index 1 and 2 of plot index 0 are now selected as are the nodes at 0 and 3 of plot index 1.
+```
+
+<br>
+## Toggle ##
+#### .disable( string)  ####
+Disable makes the chart inactive for user interactions. This is useful in the case of time-consuming operations. An optional string can be passed through that will be displayed as a message on top of the disabled chart.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | String (optional) | [Disable Message](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__disable)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").disable("Waiting on the world to change...");
+
+// Disclaimer: you don't have to use John Mayer lyrics in your disable message but no one would fault you if you did.
+```
+
+<br>
+#### .enable() ####
+Enables a chart for user interactions, turning off the disabled attribute.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").enable();
+```
+<br>
+#### .fullscreen() ####
+Randers the chart in fullscreen. Can be exited with .exitFullscreen() or hitting the escape key.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").fullscreen();
+```
+
+<br>
+#### .exitFullscreen() ####
+Destroys the fullscreen render of the chart.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").exitFullscreen();
+```
+
+<br>
+#### .maximizeLegend() ####
+Maximizes the legend.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").maximizeLegend();
+```
+
+<br>
+#### .minimizeLegend() ####
+Minimizes the legend.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").minimizeLegend();
+```
+
+<br>
+#### .showMenu() ####
+Shows the context menu.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").showMenu();
+```
+
+<br>
+#### .hideMenu() ####
+Hides the context menu.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | |
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").hideMenu();
+```
+
+<br>
+#### .showPlot( object ) ####
+Shows the plot specified by **plotindex** or **plotid**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Plot Index Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__showplot)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").showPlot({
+	"plotindex": 1
+});
+```
+
+<br>
+#### .showAllPlots( object ) ####
+Shows ALL plots. Takes an optional object as a parameter than can specify a **graphid**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | Graph ID Object
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Show all plots for all graphs.
+```javascript
+$("#myChart").showAllPlots();
+```
+Show all plots for a specific graph.
+```javascript
+$("#myChart").showAllPlots({
+	graphid: "graph1"
+});
+```
+
+<br>
+#### .showAllPlotsBut( object ) ####
+> This won't have a visible effect unless some charts have been hidden.
+
+Shows ALL plots EXCEPT the **plotindex** you specify.
+An optional **graphid** attribute can be passed as well to affect only that graph.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | Specify the plotindex (required) and the graphid (optional)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Show all plots except plotindex 0 for all graphsets.
+```javascript
+$("#myChart").showAllPlotsBut({
+	plotindex: 0
+});
+```
+
+Show all plots except plotindex 0 for graphid "graph0".
+```javascript
+$("#myChart").showAllPlotsBut({
+	graphid: "graph0",
+	plotindex: 0
+});
+```
+
+<br>
+#### .hidePlot( object ) ####
+Hides the plot specified by **plotindex** or **plotid**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Plot Index Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__hideplot)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").hidePlot({
+	plotindex: 1
+});
+```
+
+<br>
+#### .hideAllPlots( object ) ####
+Hides ALL plots. Takes an optional object as a parameter than can specify a **graphid**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | Graph ID Object
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+Hide all plots for all graphs.
+```javascript
+$("#myChart").hideAllPlots();
+```
+Hide all plots for a specific graph.
+```javascript
+$("#myChart").hideAllPlots({
+	graphid: "graph1"
+});
+```
+
+<br>
+#### .hideAllPlotsBut( object ) ####
+Hides ALL plots EXCEPT the plot index you specify via the attribute **plotindex**.
+An optional graphset can be set via the attribute **graphid**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | Specify the plotindex (required) and the graphid (optional)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+**Hide all plots across all graphsets except plotindex 0**
+
+```javascript
+$("#myChart").hideAllPlotsBut({
+	plotindex: 0
+});
+```
+
+**Hide all plots on the graphid "graph0" except plotindex 0**
+
+```javascript
+$("#myChart").hideAllPlotsBut({
+	graphid: "graph0",
+	plotindex: 0
+});
+```
+
+<br>
+#### .toggleAbout() ####
+Toggle the 'About' screen on and off.
+
+Value | Type | Details
+--- | --- | ---
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").toggleAbout();
+```
+
+<br>
+#### .toggleBugReport() ####
+Toggle the 'Bug Report' screen on an off.
+
+Value | Type | Details
+--- | --- | ---
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").toggleBugReport();
+```
+
+<br>
+#### .toggleDimension() ####
+For graphs with the option of 3D mode, toggles between 2D and 3D.
+
+Value | Type | Details
+--- | --- | ---
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").toggleDimension();
+```
+
+<br>
+#### .toggleLegend() ####
+Toggle the visibility of the legend.
+
+Value | Type | Details
+--- | --- | ---
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").toggleLegend();
+```
+
+<br>
+#### .toggleLens() ####
+Toggle the visibility of the lens.
+
+Value | Type | Details
+--- | --- | ---
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").toggleLens();
+```
+
+<br>
+#### .toggleSource() ####
+Toggle the visibility of the View Source Screen.
+
+Value | Type | Details
+--- | --- | ---
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").toggleSource();
+```
+
+<br>
+## Zoom ##
+#### .viewAll() ####
+Resets the zoom of the chart to 'view all'. Big surprise, eh?
+
+Value | Type | Details
+--- | --- | ---
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").viewAll();
+```
+
+<br>
+#### .zoomIn( object ) ####
+Zooms in the graph. **zoomx** and **zoomy** allow you to determine which scales will zoom by setting them to ```true``` or ```false```.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Zoom Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__zoomin)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").zoomIn({
+	"zoomx": true,
+	"zoomy": false
+});
+
+// The chart will now zoom in only by scaling the x-scale.
+```
+
+<br>
+#### .zoomOut( object ) ####
+Zooms out the graph. **zoomx** and **zoomy** allow you to determine which scales will zoom out by setting them to ```true``` or ```false```.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Zoom Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__zoomout)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").zoomOut({
+	"zoomx": false,
+	"zoomy": true
+});
+
+// The chart will now zoom out only by scaling the y-scale.
+```
+
+<br>
+#### .zoomTo( object ) ####
+Zooms to a specific area in a graph specified by **xmin**, **xmax**, **ymin**, **ymax**.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Zoom To Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__zoomto)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").zoomTo({
+	"xmin": 10,
+	"xmax": 30,
+	"ymin": 12,
+	"ymax": 17
+});
+
+// The chart will now be zoomed in to show
+// values 10 through 30 on the x-scale and 
+// values 12 through 17 on the y scale.
+```
+
+<br>
+#### .zoomToValues( object ) ####
+Zooms to a specific area in a graph specified by x-scale values or labels. Use this option when you're x-axis doesn't use numbers (i.e. months, names, etc).
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | [Zoom To Values Object](http://www.zingchart.com/docs/api/api-methods/#zingchart__exec__api__zoomtovalues)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").zoomToValues({
+	"xmin": "Feb",
+	"xmax": "Apr",
+	"ymin": 200,
+	"ymax": 300
+});
+
+// The chart will now be zoomed in to show
+// values "Feb" through "Apr" on the x-scale 
+// and values 200 through 300 on the y scale.
+```
+
+<br>
+# Events[](#events) #
+
+Events are one of the most powerful aspects of the ZingChart API. While other charting libraries have only a handful of events, ZingChart provides dozens of built-in events to monitor and track.
+
+All events take a callback as a argument. Within that callback, you have access to both the jQuery object (the DOM element in which the chart resides) and the event object, an object which reveals different data for each event.
+
+
+To access the jQuery object, simply use ```this```.
+
+To access the event object, use ```this.event```.
+
+Here's an example using the node click event:
+
+```javascript
+$("#myChart").nodeClick(function(){
+
+	// Below, we're accessing the event object
+	console.log("Node Value:"+this.event.value); 	// Print the node's value
+	console.log("Node Index:"+this.event.nodeindex); // Print the node's index
+	console.log("Plot Index:"+this.event.plotindex);	// Print the plot index
+	console.log("Chart ID:"+this.event.id);			// Print the chart's ID
+
+	// Down here, we're accessing the jQuery object and using normal
+	// jQuery functionality on the chart's DOM element. Snazzy!
+	$(this).css("border","5px solid #F00");
+
+});
+```
+
+**Under The Hood**
+ > What we're doing here is extending the jQuery object with a custom 'event' attribute. That event attribute holds all the event data returned by the ZingChart event API call. What this allows us to do is retain access to the jQuery element and all it's associated attributes and functionality while also providing easy and granular access to the event attributes. That means less code and more party.
+
+**The Event Object**
+
+```javascript
+{
+	ev: MouseEvent,
+	graphid: "myChart-graph-id0",
+	id: "myChart",
+	key: 2,
+	nodeindex: 2,
+	plotid: "",
+	plotindex: 0,
+	scaletext: "2",
+	text: "9",
+	value: 9
+}
+```
+
+The key in the above example is the ```evt``` argument. That argument can have any unreserved name (```evt```, ```p```, etc.).
+
+Let's get down to business with the events.
+
+## Animation Events
+#### .animationStart( callback )
+Fires the callback when the chart's animation starts.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0"
+}
+```
+
+```javascript
+$("#myChart").animationStart(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .animationEnd( callback )
+Fires the callback when the chart's animation ends.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0"
+}
+```
+
+```javascript
+$("#myChart").animationEnd(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .animationStep( callback )
+Fires the callback for every step of the animation, for every plot/node. That means it fires A LOT. Like, dozens of times. Be **very** careful what you do inside the callback as it is very easy to kill your browser if you use this improperly.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0",
+	// The index of the node being animated
+	nodeindex: 0,
+	// The index of the plot being animated
+	plotindex: 0,
+	// The "position" in the animation timeline.
+	// It starts from 0 and ends as 1 but for several animation methods, intermediate values can exceed 1
+	stage: 1
+}
+```
+
+```javascript
+$("#myChart").animationStep(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Data Manipulation Events
+#### .chartModify( callback )
+Fires the callback when ZingChart is modified via the modify API call. This applies to both the wrapper method and the hand-coded modify method.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0",
+	// The object being modified
+	object: 'title',
+	// The data passed through to modify the object.
+	// In this case, it's text for a new title.
+	text: 'A whole new title',
+}
+```
+
+```javascript
+$("#myChart").chartModify(function(){
+	// Make some magic
+});
+```
+<br>
+#### .nodeAdd( callback )
+Fires the callback when a node is added to the chart.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0",
+	// The node's key
+	key: 5,
+	// The node's index.
+	nodeindex: 5,
+	// The plot's index to which the node was added.
+	plotindex: 0,
+	// The text of the node (similar to value)
+	text: 11,
+	// The value of the node
+	value: 11
+}
+```
+
+```javascript
+$("#myChart").nodeAdd(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .nodeRemove( callback )
+Fires the callback when a node is removed from the chart.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0",
+	// The node's key
+	key: 2,
+	// The node's index.
+	nodeindex: 2,
+	// The plot's index from which the node was removed.
+	plotindex: 1,
+	// The text of the node (similar to value)
+	text: 21,
+	// The value of the node
+	value: 21
+}
+```
+
+```javascript
+$("#myChart").nodeRemove(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotAdd( callback )
+Fires the callback when a plot is added to the chart.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0",
+	// The index of the added plot.
+	plotindex: 1,
+	// Data about the added plot (object)
+	data: {
+		// This object contains information about the added plot.
+		// Example data includes: an array of values, the palette, etc.
+	}
+}
+```
+
+```javascript
+$("#myChart").plotAdd(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotRemove( callback )
+Fires the callback when a plot is removed from the chart.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0",
+	// The node's key
+	key: 2,
+	// The index of the removed plot.
+	plotindex: 1
+}
+```
+
+```javascript
+$("#myChart").plotRemove(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotModify( callback )
+Fires the callback when a plot of the chart is modified.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0",
+	// The index of the added plot.
+	plotindex: 0,
+	// Data about the added plot (object)
+	data: {
+		// This object contains information about the modified plot.
+		// Whatever info is passed in the data object when modifyPlot
+		// is called will appear here.
+		// Example data includes: an array of values, the color, etc.
+	}
+}
+```
+
+```javascript
+$("#myChart").plotModify(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .chartReload( callback )
+Fires the callback when the chart is reloaded.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The render type of the added chart.
+	output: 'canvas',
+	// The new height of the chart.
+	height: 300,
+	// The new width of the chart.
+	width: 500,
+	// The x position of the chart.
+	x: 0,
+	// The y position of the chart.
+	y: 0,
+	// Data about the reload call (object)
+	params: { }
+}
+```
+
+```javascript
+$("#myChart").chartReload(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .dataSet( callback )
+Fires the callback when the chart is reloaded.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The data packet that was sent (object)
+	data: { }
+}
+```
+
+```javascript
+$("#myChart").dataSet(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Export Events
+#### .dataExport( callback )
+Fires the callback when the user exports the graph data.
+
+**NOTE**: Only works if exportdataurl is set in .zingchart options.
+
+```javascript
+$("#myChart").dataExport(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .imageSave( callback )
+Fires the callback when the user saves an image of the graph.
+
+**NOTE**: Only works if exportimageurl is set in .zingchart options.
+
+```javascript
+$("#myChart").imageSave(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .chartPrint( callback )
+Fires the callback when the user prints the graph.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The render type of the printed chart.
+	output: 'canvas',
+	// The height of the chart.
+	height: 300,
+	// The width of the chart.
+	width: 500,
+	// The x position of the chart.
+	x: 0,
+	// The y position of the chart.
+	y: 0,
+	// Data about the print call (object)
+	params: { }
+}
+```
+
+```javascript
+$("#myChart").chartPrint(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Feed Events
+#### .feedClear( callback )
+Fires the callback when the feed is cleared.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The render type of the feed chart.
+	output: 'canvas',
+	// The height of the chart.
+	height: 300,
+	// The width of the chart.
+	width: 500,
+	// The x position of the chart.
+	x: 0,
+	// The y position of the chart.
+	y: 0,
+	// Data about the clearFeed call (object)
+	params: { }
+}
+```
+
+```javascript
+$("#myChart").feedClear(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .feedIntervalModify( callback )
+Fires the callback when the feed's interval is modified.
+
+```javascript
+$("#myChart").feedIntervalModify(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .feedStart( callback )
+Fires the callback when the feed starts.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The render type of the feed chart.
+	output: 'canvas',
+	// The height of the chart.
+	height: 300,
+	// The width of the chart.
+	width: 500,
+	// The x position of the chart.
+	x: 0,
+	// The y position of the chart.
+	y: 0,
+	// Data about the clearFeed call (object)
+	params: { }
+}
+```
+
+```javascript
+$("#myChart").feedStart(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .feedStop( callback )
+Fires the callback when the feed stops.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The render type of the feed chart.
+	output: 'canvas',
+	// The height of the chart.
+	height: 300,
+	// The width of the chart.
+	width: 500,
+	// The x position of the chart.
+	x: 0,
+	// The y position of the chart.
+	y: 0,
+	// Data about the stopFeed call (object)
+	params: { }
+}
+```
+
+```javascript
+$("#myChart").feedStop(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Global Events
+#### .graphClick( callback )
+Fires the callback when the user clicks anywhere in the graph.
+All attributes of the event object are dependent on where the click originated.
+
+**Sample Event Object**
+```javascript
+{
+	// The id of the chart
+	id: "myChart",
+	// The id of the graph
+	graphid: "myChart-graph-id0",
+	// If the click was inside, the plotarea, this will be true.
+	// Otherwise, it will be false.
+	plotarea: true,
+	// The target will be set to whatever element of the chart was clicked.
+	// If no specific object was clicked, target will equal "none".
+	target: "node",
+	// The targetid will be the ID in the DOM of the object you clicked.
+	targetid: "myChart-graph-id0-plotset0-plot0-plot-1-node-0"
+	// The x position of the click event.
+	x: 168.203125,
+	// The y position of the click event.
+	y: 21.5625,
+	// Touch tells if the event was triggered by a touch-screen.
+	touch: false,
+	// Data about the stopFeed call (object)
+	ev: { } // MouseEvent
+}
+```
+
+```javascript
+$("#myChart").graphClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .graphComplete( callback )
+Fires the callback when the graphset is completely rendered. It's called even on API calls that require chart repaint.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").graphComplete(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .graphDataParse( callback )
+Fires the callback when the data is availabe for the chart, prior to parsing routines. Useful for changing/adding elements into the data.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").graphDataParse(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .graphDataReady( callback )
+Fires the callback when the data is ready to be parsed.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").graphDataReady(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .graphGuideMouseMove( callback )
+Fires the callback when the guide position changes.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").graphGuideMouseMove(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .graphLoad( callback )
+Fires the callback only the first time the graphset is completely rendered.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").graphLoad(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .graphMenuItemClick( callback )
+Fires the callback when a context menu item is clicked.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").graphMenuItemClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .graphResize( callback )
+Fires the callback when the graph is resized.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").graphResize(function(){
+	// Make some magic
+});
+```
+
+<br>
+## History Events
+#### .historyForward( callback )
+Fires the callback when the users goes forward in the chart history.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").historyForward(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .historyBack( callback )
+Fires the callback when the user goes backward in the chart history.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").historyBack(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Interactive Events
+#### .nodeSelect( callback )
+Fires the callback when Interactive Mode is on and a node is selected.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").nodeSelect(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .nodeDeselect( callback )
+Fires the callback when Interactive Mode is on and a node is deselected.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").nodeDeselect(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotSelect( callback )
+Fires the callback when Interactive Mode is on and a plot is selected.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotSelect(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotDeselect( callback )
+Fires the callback when Interactive Mode is on and a plot is deselected.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotDeselect(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Legend Events
+#### .legendItemClick( callback )
+Fires the callback when a legend item is clicked.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").legendItemClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .legendMarkerClick( callback )
+Fires the callback when a legend marker is clicked.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").legendMarkerClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .legendShow( callback )
+Fires the callback when the legend is shown.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").legendShow(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .legendHide( callback )
+Fires the callback when the legend is hidden.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").legendHide(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .legendMaximize( callback )
+Fires the callback when the legend is maximized.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").legendMaximize(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .legendMinimize( callback )
+Fires the callback when the legend is minimized.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").legendMinimize(function(){
+	// Make some magic
+});
+```
+<br>
+## Node Events
+#### .nodeClick( callback )
+Fires the callback when a node is clicked.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").nodeClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .nodeDoubleClick( callback )
+Fires the callback when a node is double clicked.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").nodeDoubleClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .nodeMouseOver( callback )
+Fires the callback when the user's mouse enters a node.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").nodeMouseOver(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .nodeMouseOut( callback )
+Fires the callback when the user's mouse exits a node.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").nodeMouseOut(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .nodeHover( callback, callback )
+Fires the first callback when the user's mouse enters a node. Fires the second callback when the user's mouse exits a node.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").nodeHover(
+	// Fires on nodeMouseOver
+	function(){
+		// Make some magic
+	},
+	// Fires on nodeMouseOut
+	function(){
+		// Make some more magic
+	}
+);
+```
+
+<br>
+## Label Events
+#### .labelClick( callback )
+Fires the callback when the user clicks a label.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").labelClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .labelMouseOver( callback )
+Fires the callback when the user's mouse enters a label.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").labelMouseOver(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .labelMouseOut( callback )
+Fires the callback when the user's mouse exits a label.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").labelMouseOut(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .labelHover( callback, callback )
+Fires the first callback when the user's mouse enters a label. Fires the second callback when the user's mouse exits a label.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").labelHover(
+	// Fires on labelMouseOver
+	function(){
+		// Make some magic
+	},
+	// Fires on labelMouseOut
+	function(){
+		// Make some more magic
+	}
+);
+```
+
+<br>
+## Shape Events
+#### .shapeClick( callback )
+Fires the callback when the user clicks a shape.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").shapeClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .shapeMouseOver( callback )
+Fires the callback when the user's mouse enters a shape.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").shapeMouseOver(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .shapeMouseOut( callback )
+Fires the callback when the user's mouse exits a shape.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").shapeMouseOut(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .shapeHover( callback, callback )
+Fires the first callback when the user's mouse enters a shape. Fires the second callback when the user's mouse exits a shape.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").shapeHover(
+	// Fires on shapeMouseOver
+	function(){
+		// Make some magic
+	},
+	// Fires on shapeMouseOut
+	function(){
+		// Make some more magic
+	}
+);
+```
+
+<br>
+## Plot Events
+#### .plotClick( callback )
+Fires the callback when the user clicks a plot.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotDoubleClick( callback )
+Fires the callback when the user double-clicks a plot.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotDoubleClick(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotMouseOver( callback )
+Fires the callback when the user's mouse enters a plot.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotMouseOver(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotMouseOut( callback )
+Fires the callback when the user's mouse exits a plot.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotMouseOut(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotHover( callback, callback )
+Fires the first callback when the user's mouse enters a plot. Fires the second callback when the user's mouse exits a plot.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotHover(
+	// Fires on plotMouseOver
+	function(){
+		// Make some magic
+	},
+	// Fires on plotMouseOut
+	function(){
+		// Make some more magic
+	}
+);
+```
+
+<br>
+#### .plotShow( callback )
+Fires the callback when a plot is shown.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotShow(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .plotHide( callback )
+Fires the callback when a plot is hidden.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").plotHide(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Toggle Events
+#### .aboutShow( callback )
+Fires the callback when the About Screen is opened.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").aboutShow(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .aboutHide( callback )
+Fires the callback when the About Screen is closed.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").aboutHide(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .bugReportShow( callback )
+Fires the callback when the Report Bug Screen is opened.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").bugReportShow(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .bugReportHide( callback )
+Fires the callback when the Bug Report Screen is closed.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").bugReportHide(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .dimensionChange( callback )
+Fires the callback when the dimension is toggled between 2D and 3D.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").dimensionChange(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .lensShow( callback )
+Fires the callback when the lens is shown.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").lensShow(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .lensHide( callback )
+Fires the callback when the lens is hidden.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").lensHide(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .sourceShow( callback )
+Fires the callback when the source is shown.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").sourceShow(function(){
+	// Make some magic
+});
+```
+
+<br>
+#### .sourceHide( callback )
+Fires the callback when the source is hidden.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").sourceHide(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Zoom Events
+#### .zoomEvent( callback )
+Fires the callback when a zoom event occurs.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | [Callback](https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/js-ctypes_reference/Callbacks)
+Return | [jQuery](http://api.jquery.com/Types/#jQuery)
+
+```javascript
+$("#myChart").zoomEvent(function(){
+	// Make some magic
+});
+```
+
+<br>
+## Additional Methods
+
+The following methods are amalgamations of other ZingChart methods. While not built in, they make use of the API and allow you to perform tedious tasks with minimal code and that's pretty sweet.
+
+#### .setTitle( string OR object )
+Allows the title to be set dynamically. This method accepts either a string or an object.
+The string parameter is useful if you just with to set the title's text and not style the title.
+The object parameter allows you to set both the text and the style for the title of the chart.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | String OR Object | String of new text OR Object with style and text.
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQueuery)
+
+Setting just text.
+```javascript
+$("#myChart").setTitle("Woohoo! New title!");
+```
+
+Setting text and style.
+```javascript
+$("#myChart").setTitle({
+	text: "My fandangled chart",
+	color: "#F0F",
+	backgroundColor = "#333"
+});
+```
+
+<br>
+#### .setSubtitle( string OR object )
+Allows the subtitle to be set dynamically. This method accepts either a string or an object.
+The string parameter is useful if you just with to set the subtitle's text and not style the subtitle.
+The object parameter allows you to set both the text and the style for the subtitle of the chart.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | String OR Object | String of new text OR Object with style and text.
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQueuery)
+
+Setting just text.
+```javascript
+$("#myChart").setSubitle("Catchy Subtitle");
+```
+
+Setting text and style.
+```javascript
+$("#myChart").setSubtitle({
+	text: "Catchy Subtitle with Color!",
+	color: "#00BAF0",
+	backgroundColor:"#003849"
+});
+```
+
+<br>
+#### .setType( string )
+Allows the type of the chart to be set dynamically. Want to make your bar chart a line chart? Done. How about a scatter chart? Wha-bam! Party time.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | String | [Chart Type](http://www.zingchart.com/docs/chart-types/)
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQueuery)
+
+```javascript
+$("#myChart").setType("scatter");
+```
