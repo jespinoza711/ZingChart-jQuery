@@ -1,4 +1,5 @@
 /* View the README.md for detailed documentation. */
+/* Version 1.0.1 | Last Updated 22 Dec. 2014 */
 
 (function ( $ ) {
 
@@ -17,8 +18,13 @@
 		return this;
 	};
 
+	// LOAD MODULES ===========================================================
+	$.fn.loadModules = function (options) {
+		zingchart.loadModules(options);
+		return this;
+	}
+
 	// DATA MANIPULATION ======================================================
-	
 	$.fn.addNode = function (data) {
 		zingchart.exec(this[0].id, "addnode", data);
 		return this;
@@ -1428,72 +1434,78 @@
 		});
 		zingchart.exec(this[0].id,"update");
 		return this;
-	}
-
-	$.fn.setTheme = function (path) {
-		var myId = this[0].id;
-		var myData = zingchart.exec(this[0].id,"getdata");
-		zingchart.exec(myId,"destroy");
-		zingchart.render({
-			id: myId,
-			data: myData,
-			defaultsurl: path
-		});
-		return this;
 	};
 
-	$.fn.removeGraph = function (opts) {
+	$.fn.drawTrendline = function (opts) {
 		var myId = this[0].id;
-		var myData = zingchart.exec(this[0].id,"getdata");
-		var gset = myData.graphset;
-		if (opts.hasOwnProperty("graphid") && (typeof(opts.graphid) == 'string')) {
-			for (var i = 0; i <gset.length; i++) {
-				if (gset[i].id == opts.graphid) {
-					gset.splice(i,1);
+		calculate.call(this,0);
+		function calculate(pindex) {
+			var nodes = $(this).getSeriesValues({
+				plotindex:pindex
+			});
+			var sxy = 0, sx = 0, sy = 0, sx2 = 0, l = 0;
+			var oScaleInfo = $(this).getObjectInfo({
+				object : 'scale',
+				name : 'scale-x'
+			});
+			var aScaleValues = oScaleInfo.values;
+			for (var i=0;i<nodes.length;i++) {
+				if (nodes[i][1] != undefined && typeof(nodes[i][1]) == 'number') {
+					sxy += nodes[i][0]*nodes[i][1];
+					sx += nodes[i][0];
+					sy += nodes[i][1];
+					sx2 += nodes[i][0]*nodes[i][0];
+					l++;
+				}
+				else {
+					sxy += nodes[i]*aScaleValues[i];
+					sx += aScaleValues[i];
+					sy += nodes[i];
+					sx2 += Math.pow(aScaleValues[i],2);
+					l++;
+				}
+			}
+			var b = (l * sxy - sx * sy) / (l * sx2 - sx * sx);
+			var a = (sy - b * sx) / l;
+			var oScaleInfo = $(this).getObjectInfo({
+				object : 'scale',
+				name : 'scale-x'
+			});
+			var aScaleValues = oScaleInfo.values, fScaleMin = aScaleValues[0], fScaleMax = aScaleValues[aScaleValues.length-1];
+			var aRange = [a + b*fScaleMin, a + b*fScaleMax];
+			var trendline = {
+				type : 'line',
+				lineColor : '#c00',
+				lineWidth : 2,
+				alpha : 0.75,
+				lineStyle : 'dashed',
+				label : {
+					text : ''
 				}
 			};
-		}
-		else if (opts.hasOwnProperty("graphid") && (typeof(opts.graphid) == 'number')) {
-			gset.splice(opts.graphid,1);
-		}
-		myData.graphset = gset;
-		zingchart.exec(myId,"setdata",{
-			data: myData
-		});
-		return this;
-	};
-
-	$.fn.addGraph = function (targetIndex,opts) {
-		var myId = this[0].id;
-		var myData = zingchart.exec(this[0].id,"getdata");
-		var gset = myData.graphset;
-		var target = targetIndex.graphid;
-		gset.splice(targetIndex, 0, opts);
-		myData.graphset = gset;
-		zingchart.exec(myId,"setdata",{
-			data: myData
-		});
-		return this;
-	};
-
-	$.fn.replaceGraph = function (target,newdata) {
-		var myId = this[0].id;
-		var myData = zingchart.exec(this[0].id,"getdata");
-		var gset = myData.graphset;
-		if (target.hasOwnProperty("graphid") && (typeof(target.graphid) == 'string')) {
-			for (var i = 0; i <gset.length; i++) {
-				if (gset[i].id == target.graphid) {
-					gset[i] = opts
+			if (opts) {
+				$.extend(trendline,opts);
+			}
+			trendline.range = aRange;
+			var scaleY = $(this).getObjectInfo({
+				object:'scale',
+				name: 'scale-y'
+			});
+			var markers = scaleY.markers;
+			if (markers) {
+				markers.push(trendline);
+			}
+			else {
+				markers = [trendline];
+			}
+			$(this).modify({
+				"data": {
+					"scale-y": {
+						"markers": markers
+					}
 				}
-			};
+			});
 		}
-		else if (target.hasOwnProperty("graphid") && (typeof(target.graphid) == 'number')) {
-			gset[target.graphid] = newdata;
-		}
-		myData.graphset = gset;
-		zingchart.exec(myId,"setdata",{
-			data: myData
-		});
 		return this;
 	};
 

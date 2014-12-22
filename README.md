@@ -83,6 +83,46 @@ Pat yourself on the back for saving time by using chaining. You're a rockstar!
 <br>
 **An Important Note**: many of the event functions may be very similar in name to the method functions and vice versa. This is intentional. The differentiation between the method functions and the event functions is that the ***method*** functions always start with a ***verb***: the action they're performing, while the ***event*** functions always start with a ***noun***: the object they're watching.
 
+Examples
+--------
+
+1. [**Chart Manipulation**: Using Methods and Events Together](http://jsfiddle.net/zingchart/2duo5ww0/)
+
+	Check out this example to see how to make a chart with lots of plots into an interactive and much more legible chart. [Edit in JSFiddle](http://jsfiddle.net/zingchart/2duo5ww0/)
+
+	[![Chart Manipulation](http://g.recordit.co/lUwnAuoqDI.gif)](http://jsfiddle.net/zingchart/2duo5ww0/)
+
+	---
+
+2. [**Chart to DOM**: Manipulating the DOM with Events](http://jsfiddle.net/zingchart/f29jn25b/)
+
+	Learn how to manipulate the DOM through the use of ZingChart jQuery events. [Edit in JSFiddle](http://jsfiddle.net/zingchart/f29jn25b/)
+
+	[![Chart to DOM](http://g.recordit.co/S2r5tcHhfm.gif)](http://jsfiddle.net/zingchart/f29jn25b/)
+
+	---
+
+3. [**DOM to Chart**: Manipulating the Chart with Methods](http://jsfiddle.net/zingchart/5ja8guxf/)
+
+	This is a great first example if you're looking to learn how to integrate ZingChart jQuery methods with standard DOM input elements. [Edit in JSFiddle](http://jsfiddle.net/zingchart/5ja8guxf/)
+
+	[![Chart to DOM](http://g.recordit.co/GljMl7bzGe.gif)](http://jsfiddle.net/zingchart/5ja8guxf/)
+
+	---
+
+4. [**AJAX Data**: Using Asynchronous Data with your Chart](http://jsfiddle.net/zingchart/z3n3qobm/)
+
+	No need to load your data at once. Check out this example to see how to get started with AJAX and the ZingChart jQuery wrapper. [Edit in JSFiddle](http://jsfiddle.net/zingchart/z3n3qobm/)
+
+	[![AJAX Data](http://g.recordit.co/6BaZJT0b7J.gif)](http://jsfiddle.net/zingchart/z3n3qobm/)
+
+	---
+
+Questions?
+----------
+
+Check out out extensive documentation below or feel free to email us at [support@zingchart.com](mailto:support@zingchart.com) if you have any questions.
+
 <br>
 # Methods[](#methods) #
 ## Rendering ##
@@ -95,6 +135,7 @@ Values | Type | Details
 Parameter | Object | [ZingChart Object](http://www.zingchart.com/docs/reference/zingchart-object/#zingchart__render)
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
+Rendering a chart
 ```javascript
 $("#myChart").zingchart({
 	"type": "line",
@@ -108,6 +149,7 @@ $("#myChart").zingchart({
 	]
 });
 ```
+
 <br>
 ## Data Manipulation ##
 #### .addNode( object ) ####
@@ -428,7 +470,7 @@ Parameter |  |
 Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQuery)
 
 ```javascript
-$("$$("#myChart")").clearFeed();
+$("#myChart").clearFeed();
 ```
 
 <br>
@@ -1795,7 +1837,7 @@ $("#myChart").nodeClick(function(){
 ```
 
 **Under The Hood**
- > What we're doing here is extending the jQuery object with a custom 'event' attribute. That event attribute holds all the event data returned by the ZingChart event API call. What this allows us to do is retain access to the jQuery element and all it's associated attributes and functionality while also providing easy and granular access to the event attributes. That means less code and more party.
+ > What we're doing here is extending the jQuery object with a custom 'event' attribute. That event attribute holds all the event data returned by the ZingChart event API call. What this allows us to do is retain access to the jQuery element and all it's associated attributes and functionality while also providing easy and granular access to the event attributes. The scope of the extended jQuery object only exists inside the event function and doesn't affect jQuery performance or functionality in anyway. That means less code and more win.
 
 **The Event Object**
 
@@ -1813,8 +1855,6 @@ $("#myChart").nodeClick(function(){
 	value: 9
 }
 ```
-
-The key in the above example is the ```evt``` argument. That argument can have any unreserved name (```evt```, ```p```, etc.).
 
 Let's get down to business with the events.
 
@@ -3135,4 +3175,28 @@ Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQueuery)
 
 ```javascript
 $("#myChart").setType("scatter");
+```
+
+<br>
+#### .drawTrendline( object )
+Draws a trendline based off the data on the 0th plotindex. An optional object can be passed through to style the trendline.
+
+Value | Type | Details
+--- | --- | ---
+Parameter | Object | Trendline Style
+Return | jQuery | [jQuery Object](http://api.jquery.com/Types/#jQueuery)
+
+Using default style.
+```javascript
+$("#myChart").drawTrendline();
+```
+
+Using custom style.
+```javascript
+$("#myChart").drawTrendline({
+	lineColor: "#0FF",
+	lineWidth: 1,
+	alpha: 1,
+	lineStyle: "solid"
+});
 ```
